@@ -1,6 +1,6 @@
 const transactionsModel = require("../models/transactions");
 const { createNewTransactions, getAllTransactionsfromServer, updateTransactions, deleteDataTransactionsfromServer } =
-    transactionsModel;
+transactionsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
 
@@ -49,7 +49,7 @@ const patchUpdateTransactions = (req, res) => {
         });
 };
 
-const deleteTransactionbyId = (req, res) => {
+const deleteTransactionsbyId = (req, res) => {
     const id = req.params;
     deleteDataTransactionsfromServer(id)
         .then(({ data }) => {
@@ -71,5 +71,5 @@ module.exports = {
     postNewTransactions,
     getAllTransactions,
     patchUpdateTransactions,
-    deleteTransactionbyId,
+    deleteTransactionsbyId,
 };

@@ -5,9 +5,9 @@ const Router = express.Router();
 const transactionsController = require("../controllers/transactions");
 const validate = require("../middlewares/validate");
 
-Router.post("/:id_products", transactionsController.postNewTransactions);
+Router.post("/", transactionsController.postNewTransactions);
 Router.get("/all", transactionsController.getAllTransactions);
 Router.patch("/:id", transactionsController.patchUpdateTransactions);
-Router.delete("/:id", transactionsController.deleteTransactionbyId);
+Router.delete("/:id", transactionsController.deleteTransactionsbyId);
 
 module.exports = Router;

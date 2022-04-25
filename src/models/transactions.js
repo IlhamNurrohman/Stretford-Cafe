@@ -3,10 +3,10 @@ const db = require("../config/db");
 
 const createNewTransactions = (body) => {
     return new Promise((resolve, reject) => {
-        const { id_users, qty, id_delivery, now, time } = body;
+        const { date, sub_total, id_payment_method, product_details_id } = body;
         const sqlQuery =
-            "INSERT INTO transactions (id_products, id_products, id_users, qty, id_delivery, now, time) VALUES ($1, $2, $3, $4, $5, $6) returning *";
-        db.query(sqlQuery, [id_products, id_users, qty, id_delivery, now, time])
+            "INSERT INTO transactions (date, sub_total, payment_method_id, product_details_id) VALUES ($1, $2, $3, $4) returning *";
+        db.query(sqlQuery, [date, sub_total, id_payment_method, product_details_id])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -19,7 +19,7 @@ const createNewTransactions = (body) => {
 
 const getAllTransactionsfromServer = () => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM transactions ")
+        db.query("SELECT * FROM transactions")
             .then((result) => {
                 const response = {
                     total: result.rowCount,
@@ -36,10 +36,10 @@ const getAllTransactionsfromServer = () => {
 const updateTransactions = (params, body) => {
     return new Promise((resolve, reject) => {
         const { id } = params
-        const { id_products, id_users, qty, id_delivery, now, time } = body;
+        const { date, sub_total, id_payment_method, product_details_id } = body;
         const sqlQuery =
-            "UPDATE transactions SET id_products=$1, id_users=$2, qty=$3, id_delivery=$4, now=$5, time=$6 where id=$7 returning *";
-        db.query(sqlQuery, [id_products, id_users, qty, id_delivery, now, time, id])
+            "UPDATE transactions SET date=$1, sub_total=$2, payment_method_id=$3, product_details_id=$4 where id=$5 returning *";
+        db.query(sqlQuery, [date, sub_total, id_payment_method, product_details_id, id])
             .then((result) => {
                 resolve({
                     data: result.rows,

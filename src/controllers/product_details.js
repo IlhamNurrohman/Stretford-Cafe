@@ -1,11 +1,11 @@
-const paymentsModel = require("../models/payments");
-const { createNewPayments, getAllPaymentsfromServer, updatePayments, deleteDataPaymentsfromServer } =
-paymentsModel;
+const ProductDetailsModel = require("../models/product_details");
+const { createNewProductDetails, getAllProductDetailsfromServer, updateProductDetails, deleteDataProductDetailsfromServer } =
+    ProductDetailsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
 
-const postNewPayments = (req, res) => {
-    createNewPayments(req.params, req.body)
+const postNewProductDetails = (req, res) => {
+    createNewProductDetails(req.params, req.body)
         .then(({ data }) => {
             res.status(200).json({
                 err: null,
@@ -20,8 +20,8 @@ const postNewPayments = (req, res) => {
         });
 };
 
-const getAllPayments = (_, res) => {
-    getAllPaymentsfromServer()
+const getAllProductDetails = (_, res) => {
+    getAllProductDetailsfromServer()
         .then((result) => {
             const { total, data } = result;
             successResponse(res, 200, data, total);
@@ -32,8 +32,8 @@ const getAllPayments = (_, res) => {
         });
 }
 
-const patchUpdatePayments = (req, res) => {
-    updatePayments(req.params, req.body)
+const patchUpdateProductDetails = (req, res) => {
+    updateProductDetails(req.params, req.body)
         .then((result) => {
             const { data, msg } = result
             res.status(200).json({
@@ -49,9 +49,9 @@ const patchUpdatePayments = (req, res) => {
         });
 };
 
-const deletePaymentsbyId = (req, res) => {
+const deleteTransactionbyId = (req, res) => {
     const id = req.params;
-    deleteDataPaymentsfromServer(id)
+    deleteDataProductDetailsfromServer(id)
         .then(({ data }) => {
             res.status(200).json({
                 data,
@@ -68,8 +68,8 @@ const deletePaymentsbyId = (req, res) => {
 };
 
 module.exports = {
-    postNewPayments,
-    getAllPayments,
-    patchUpdatePayments,
-    deletePaymentsbyId,
+    postNewProductDetails,
+    getAllProductDetails,
+    patchUpdateProductDetails,
+    deleteTransactionbyId,
 };

@@ -1,12 +1,12 @@
 const { response } = require("express");
 const db = require("../config/db");
 
-const createNewPayments = (body) => {
+const createNewProductDetails = (body) => {
     return new Promise((resolve, reject) => {
-        const { date, sub_total, id_payment_method, id_transactions } = body;
+        const { id_users, qty, id_delivery, now, time } = body;
         const sqlQuery =
-            "INSERT INTO payments (date, sub_total, id_payment_method, id_transactions) VALUES ($1, $2, $3, $4) returning *";
-        db.query(sqlQuery, [date, sub_total, id_payment_method, id_transactions])
+            "INSERT INTO product_details (products_id, users_id, qty, delivery_method_id, now, time) VALUES ($1, $2, $3, $4, $5, $6) returning *";
+        db.query(sqlQuery, [id_products, id_users, qty, id_delivery, now, time])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -17,9 +17,9 @@ const createNewPayments = (body) => {
     });
 };
 
-const getAllPaymentsfromServer = () => {
+const getAllProductDetailsfromServer = () => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM payments")
+        db.query("SELECT * FROM product_details ")
             .then((result) => {
                 const response = {
                     total: result.rowCount,
@@ -33,13 +33,13 @@ const getAllPaymentsfromServer = () => {
     });
 };
 
-const updatePayments = (params, body) => {
+const updateProductDetails = (params, body) => {
     return new Promise((resolve, reject) => {
         const { id } = params
-        const { date, sub_total, id_payment_method, id_transactions } = body;
+        const { id_products, id_users, qty, id_delivery, now, time } = body;
         const sqlQuery =
-            "UPDATE payments SET date=$1, sub_total=$2, id_payment_method=$3, id_transactions=$4 where id=$5 returning *";
-        db.query(sqlQuery, [date, sub_total, id_payment_method, id_transactions, id])
+            "UPDATE product_details SET products_id=$1, id_users=$2, qty=$3, id_delivery=$4, now=$5, time=$6 where id=$7 returning *";
+        db.query(sqlQuery, [id_products, id_users, qty, id_delivery, now, time, id])
             .then((result) => {
                 resolve({
                     data: result.rows,
@@ -50,10 +50,10 @@ const updatePayments = (params, body) => {
     });
 };
 
-const deleteDataPaymentsfromServer = (params) => {
+const deleteDataProductDetailsfromServer = (params) => {
     return new Promise((resolve, reject) => {
         const { id } = params;
-        const sqlQuery = "DELETE FROM payments WHERE id=$1 returning *";
+        const sqlQuery = "DELETE FROM product_details WHERE id=$1 returning *";
         db.query(sqlQuery, [id])
             .then((data) => {
                 if (data.rows.length === 0) {
@@ -70,8 +70,8 @@ const deleteDataPaymentsfromServer = (params) => {
 }
 
 module.exports = {
-    createNewPayments,
-    getAllPaymentsfromServer,
-    updatePayments,
-    deleteDataPaymentsfromServer,
+    createNewProductDetails,
+    getAllProductDetailsfromServer,
+    updateProductDetails,
+    deleteDataProductDetailsfromServer,
 };
