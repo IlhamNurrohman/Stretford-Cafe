@@ -1,0 +1,75 @@
+const usersModel = require("../models/users");
+const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer} =
+  usersModel;
+const { successResponse, errorResponse } = require("../helpers/response");
+const { status } = require("express/lib/response");
+
+const getAllUsers = (_, res) => {
+  getAllUsersfromServer()
+  .then((result) => {
+    const { total, data } = result;
+    successResponse(res, 200, data, total);
+  })
+  .catch((error) => {
+    const { err, status } = error;
+    errorResponse(res, status, err);
+  });
+}
+
+const deleteUsersbyId = (req, res) => {
+  const id = req.params;
+  deleteDataUsersfromServer(id)
+    .then(({ data }) => {
+      res.status(200).json({
+        data,
+        err: null,
+      });
+    })
+    .catch((error) => {
+      const { err, status } = error;
+      res.status(status).json({
+        data: [],
+        err,
+      });
+    });
+};
+
+const postNewUsers = (req, res) => {
+    createNewUsers(req.body)
+      .then(({ data }) => {
+        res.status(200).json({
+          err: null,
+          data,
+        });
+      })
+      .catch(({ status, err }) => {
+        res.status(status).json({
+          err,
+          data: [],
+        });
+      });
+  };
+
+  const patchUpdateUsers = (req, res) => {
+    updateUsers(req.params, req.body)
+      .then((result) => {
+        const { data, msg } = result
+        res.status(200).json({
+          data,
+          msg,
+        })
+      })
+      .catch(({ status, err }) => {
+        res.status(status).json({
+          err,
+          data: [],
+        });
+      });
+  };
+
+  module.exports = { 
+    postNewUsers,
+    getAllUsers,
+    patchUpdateUsers,
+    deleteUsersbyId,
+   };

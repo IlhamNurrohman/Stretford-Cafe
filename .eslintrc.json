@@ -1,0 +1,18 @@
+{
+    "env": {
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "google"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "semi": ["error", "always"],
+        "qoutes": ["error", "double"],
+        "no-unused-vars": ["error", {"vars": "all", "args": "after-used"}]
+    }
+}
