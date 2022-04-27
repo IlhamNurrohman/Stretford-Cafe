@@ -3,10 +3,10 @@ const db = require("../config/db");
 
 const createNewProducts = (body) => {
     return new Promise((resolve, reject) => {
-        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, users_id } = body;
+        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price } = body;
         const sqlQuery =
-            "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, users_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *";
-        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, users_id])
+            "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *";
+        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -36,10 +36,10 @@ const getAllProductsfromServer = () => {
 const updateProducts = (params, body) => {
     return new Promise((resolve, reject) => {
         const { id } = params
-        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, users_id } = body;
+        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price } = body;
         const sqlQuery =
-            "UPDATE products SET name=$1, sizes_id=$3, description=$4, delivery_methods_id=$5, start_hours=$6, end_hours=$7, stock=$8, pictures=$9, users_id=$10 where id=$11 returning *";
-        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, users_id, id])
+            "UPDATE products SET name=$1, sizes_id=$2, description=$3, delivery_methods_id=$4, start_hours=$5, end_hours=$6, stock=$7, pictures=$8, categories_id=$9, price=$10 where id=$11 returning *";
+        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, id])
             .then((result) => {
                 resolve({
                     data: result.rows,
@@ -92,10 +92,61 @@ const findProducts = (query) => {
     });
   };
 
+  const filterProductCoffee = () => {
+    return new Promise((resolve, reject) => {
+        db.query("select a.name, a.price, a.pictures from products a join categories b on a.categories_id  = b.id where a.categories_id = 1")
+            .then((result) => {
+                const response = {
+                    total: result.rowCount,
+                    data: result.rows,
+                };
+                resolve(response);
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            })
+    });
+};
+
+const filterProductNonCoffee = () => {
+    return new Promise((resolve, reject) => {
+        db.query("select a.name, a.price, a.pictures from products a join categories b on a.categories_id  = b.id where a.categories_id = 4")
+            .then((result) => {
+                const response = {
+                    total: result.rowCount,
+                    data: result.rows,
+                };
+                resolve(response);
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            })
+    });
+};
+
+const filterProductFood = () => {
+    return new Promise((resolve, reject) => {
+        db.query("select a.name, a.price, a.pictures from products a join categories b on a.categories_id  = b.id where a.categories_id = 6")
+            .then((result) => {
+                const response = {
+                    total: result.rowCount,
+                    data: result.rows,
+                };
+                resolve(response);
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            })
+    });
+};
+
 module.exports = {
     createNewProducts,
     getAllProductsfromServer,
     updateProducts,
     deleteDataProductsfromServer,
     findProducts,
+    filterProductCoffee,
+    filterProductNonCoffee,
+    filterProductFood,
 };

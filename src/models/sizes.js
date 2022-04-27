@@ -3,10 +3,10 @@ const db = require("../config/db");
 
 const createNewsizes = (body) => {
     return new Promise((resolve, reject) => {
-        const { name_size, price, description, products_id } = body;
+        const { name_size, description } = body;
         const sqlQuery =
-            "INSERT INTO sizes (name_size, price, description, products_id) VALUES ($1, $2, $3, $4) returning *";
-        db.query(sqlQuery, [name_size, price, description, products_id])
+            "INSERT INTO sizes (name_size, description) VALUES ($1, $2) returning *";
+        db.query(sqlQuery, [name_size, description])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -36,10 +36,10 @@ const getAllsizesfromServer = () => {
 const updatesizes = (params, body) => {
     return new Promise((resolve, reject) => {
         const { id } = params
-        const { name_size, price, description, products_id } = body;
+        const { name_size, description } = body;
         const sqlQuery =
-            "UPDATE sizes SET name_size=$1, price=$2, description=$3, products_id=$4 where id=$5 returning *";
-        db.query(sqlQuery, [name_size, price, description, products_id, id])
+            "UPDATE sizes SET name_size=$1, description=$2 where id=$3 returning *";
+        db.query(sqlQuery, [name_size, description, id])
             .then((result) => {
                 resolve({
                     data: result.rows,

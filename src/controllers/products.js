@@ -1,5 +1,5 @@
 const productsModel = require("../models/products");
-const { createNewProducts, getAllProductsfromServer, updateProducts, deleteDataProductsfromServer, findProducts } =
+const { createNewProducts, getAllProductsfromServer, updateProducts, deleteDataProductsfromServer, findProducts, filterProductCoffee, filterProductFood, filterProductNonCoffee } =
     productsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -32,7 +32,7 @@ const getAllProducts = (_, res) => {
 }
 
 const patchUpdateProducts = (req, res) => {
-    updateProducts(req.body)
+    updateProducts(req.params, req.body)
         .then((result) => {
             const { data, msg } = result
             res.status(200).json({
@@ -83,10 +83,49 @@ const findProductsByQuery = (req, res) => {
         });
 };
 
+const filterCategoriesCoffee = (_, res) => {
+    filterProductCoffee()
+        .then((result) => {
+            const { total, data } = result;
+            successResponse(res, 200, data, total);
+        })
+        .catch((error) => {
+            const { err, status } = error;
+            errorResponse(res, status, err);
+        });
+}
+
+const filterCategoriesNonCoffee = (_, res) => {
+    filterProductNonCoffee()
+        .then((result) => {
+            const { total, data } = result;
+            successResponse(res, 200, data, total);
+        })
+        .catch((error) => {
+            const { err, status } = error;
+            errorResponse(res, status, err);
+        });
+}
+
+const filterCategoriesFood = (_, res) => {
+    filterProductFood()
+        .then((result) => {
+            const { total, data } = result;
+            successResponse(res, 200, data, total);
+        })
+        .catch((error) => {
+            const { err, status } = error;
+            errorResponse(res, status, err);
+        });
+}
+
 module.exports = {
     postNewProduts,
     getAllProducts,
     patchUpdateProducts,
     deleteProductsbyId,
     findProductsByQuery,
+    filterCategoriesCoffee,
+    filterCategoriesNonCoffee,
+    filterCategoriesFood,
 };
