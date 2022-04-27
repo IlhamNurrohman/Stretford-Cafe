@@ -1,5 +1,5 @@
 const productsModel = require("../models/products");
-const { createNewProducts, getAllProductsfromServer, updateProducts, deleteDataProductsfromServer, findProducts, filterProductCoffee, filterProductFood, filterProductNonCoffee } =
+const { createNewProducts, getAllProductsfromServer, updateProducts, deleteDataProductsfromServer, findProducts, filterProductCoffee, sortProductsTransactions, sortProducts } =
     productsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -83,8 +83,8 @@ const findProductsByQuery = (req, res) => {
         });
 };
 
-const filterCategoriesCoffee = (_, res) => {
-    filterProductCoffee()
+const filterCategoriesCoffee = (req, res) => {
+    filterProductCoffee(req.query)
         .then((result) => {
             const { total, data } = result;
             successResponse(res, 200, data, total);
@@ -119,6 +119,74 @@ const filterCategoriesFood = (_, res) => {
         });
 }
 
+const sortProductsByPrice = (_, res) => {
+    sortProductsPrice()
+        .then(({ data, total }) => {
+            res.status(200).json({
+                err: null,
+                data,
+                total,
+            });
+        })
+        .catch(({ status, err }) => {
+            res.status(status).json({
+                data: [],
+                err,
+            });
+        });
+};
+
+const sortProductsByTime = (_, res) => {
+    sortProductsTime()
+        .then(({ data, total }) => {
+            res.status(200).json({
+                err: null,
+                data,
+                total,
+            });
+        })
+        .catch(({ status, err }) => {
+            res.status(status).json({
+                data: [],
+                err,
+            });
+        });
+};
+
+const sortProductsByTransactions = (_, res) => {
+    sortProductsTransactions()
+        .then(({ data, total }) => {
+            res.status(200).json({
+                err: null,
+                data,
+                total,
+            });
+        })
+        .catch(({ status, err }) => {
+            res.status(status).json({
+                data: [],
+                err,
+            });
+        });
+};
+
+const sortProductsByQuery = (req, res) => {
+    sortProducts(req.query)
+        .then(({ data, total }) => {
+            res.status(200).json({
+                err: null,
+                data,
+                total,
+            });
+        })
+        .catch(({ status, err }) => {
+            res.status(status).json({
+                data: [],
+                err,
+            });
+        });
+};
+
 module.exports = {
     postNewProduts,
     getAllProducts,
@@ -128,4 +196,8 @@ module.exports = {
     filterCategoriesCoffee,
     filterCategoriesNonCoffee,
     filterCategoriesFood,
+    sortProductsByPrice,
+    sortProductsByTime,
+    sortProductsByTransactions,
+    sortProductsByQuery,
 };
