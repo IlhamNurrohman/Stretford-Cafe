@@ -40,7 +40,7 @@ validate.usersData = (req, res, next) => {
 
 validate.productsData = (req, res, next) => {
   // cek apakah body sesuai dengan yang diinginkan
-  const { body, name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price } = req;
+  const { body } = req;
   const validBody = Object.keys(body).filter(
     (key) => key === "name" || key === "sizes_id" || key === "description" || key === "delivery_methods_id" || key === "start_hours" || key === "end_hours" || key === "stock" || key === "pictures" || key === "categories_id" || key === "price" 
   );
@@ -50,37 +50,118 @@ validate.productsData = (req, res, next) => {
       err: "Body harus berisikan data lengkap",
     });
   }
-  // if(typeof name !== "string" ){
-  //   return "Data harus string"
-  // }
-  // if(typeof sizes_id !== "number" ){
-  //   return "Data harus number"
-  // }
-  // if(typeof description !== "string" ){
-  //   return "Data harus string"
-  // }
-  // if(typeof delivery_methods_id !== "number" ){
-  //   return "Data harus number"
-  // }
-  // if(typeof start_hours !== "number" ){
-  //   return "Data harus number"
-  // }
-  // if(typeof end_hours !== "number" ){
-  //   return "Data harus number"
-  // }
-  // if(typeof stock !== "number" ){
-  //   return "Data harus number"
-  // }
-  // if(typeof pictures !== "string" ){
-  //   return "Data harus string"
-  // }
-  // if(typeof categories_id !== "number" ){
-  //   return "Data harus number"
-  // }
-  // if(typeof price !== "number" ){
-  //   return "Data harus number"
-  // }
 
+  next();
+};
+
+validate.productDetailsData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "products_id" || key === "users_id" || key === "qty" || key === "delivery_methods_id" || key === "now" || key === "time"
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 6) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
+
+  next();
+};
+
+validate.promosData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "name_product" || key === "normal_price" || key === "description" || key === "sizes_id" || key === "delivery_methods_id" || key === "discount" || key === "start_date" || key === "end_start" || key === "coupon_code" || key === "pictures" 
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 10) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
+
+  next();
+};
+
+validate.transactionsData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "date" || key === "sub_total" || key === "payments_methods_id" || key === "product_details_id" || key === "created_at" || key === "updated_at"
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 6) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
+
+  next();
+};
+
+validate.deliveryMethodsData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "name" || key === "description"
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 2) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
+
+  next();
+};
+
+validate.categoriesData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "name" || key === "description"
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 2) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
+
+  next();
+};
+
+validate.paymentMethodsData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "name" || key === "description"
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 2) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
+
+  next();
+};
+
+validate.sizesData = (req, res, next) => {
+  // cek apakah body sesuai dengan yang diinginkan
+  const { body } = req;
+  const validBody = Object.keys(body).filter(
+    (key) => key === "name" || key === "description"
+  );
+  // diinginkan ada ketiga body diatas
+  if (validBody.length < 2) {
+    return res.status(400).json({
+      err: "Body harus berisikan data lengkap",
+    });
+  }
 
   next();
 };

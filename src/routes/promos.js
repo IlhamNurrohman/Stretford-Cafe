@@ -5,9 +5,9 @@ const Router = express.Router();
 const promosController = require("../controllers/promos");
 const validate = require("../middlewares/validate");
 
-Router.post("/", promosController.postNewPromos);
+Router.post("/", validate.promosData, promosController.postNewPromos);
 Router.get("/all", promosController.getAllPromos);
-Router.patch("/:id", promosController.patchUpdatePromos);
+Router.patch("/:id", validate.promosData, promosController.patchUpdatePromos);
 Router.delete("/:id", promosController.deletePromosbyId);
 Router.get("/", promosController.findPromosByQuery);
 
