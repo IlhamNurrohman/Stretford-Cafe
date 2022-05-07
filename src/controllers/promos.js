@@ -1,5 +1,5 @@
 const promosModel = require("../models/promos");
-const { createNewPromos, getAllPromosfromServer, updatePromos, deleteDataPromosfromServer, findPromos } =
+const { createNewPromos, findPromosfromServer, updatePromos, deleteDataPromosfromServer, sortPromos } =
     promosModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -19,8 +19,8 @@ const postNewPromos = (req, res) => {
         });
 };
 
-const getAllPromos = (_, res) => {
-    getAllPromosfromServer()
+const findPromos = (req, res) => {
+    findPromosfromServer(req.query)
         .then((result) => {
             const { total, data } = result;
             successResponse(res, 200, data, total);
@@ -67,8 +67,8 @@ const deletePromosbyId = (req, res) => {
         });
 };
 
-const findPromosByQuery = (req, res) => {
-    findPromos(req.query)
+const sortPromosByQuery = (req, res) => {
+    sortPromos(req.query)
         .then(({ data, total }) => {
             res.status(200).json({
                 err: null,
@@ -86,8 +86,8 @@ const findPromosByQuery = (req, res) => {
 
 module.exports = {
     postNewPromos,
-    getAllPromos,
+    findPromos,
     patchUpdatePromos,
     deletePromosbyId,
-    findPromosByQuery
+    sortPromosByQuery
 };

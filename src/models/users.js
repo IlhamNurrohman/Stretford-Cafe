@@ -3,7 +3,7 @@ const db = require("../config/db");
 
 const getAllUsersfromServer = () =>{
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM users")
+    db.query("SELECT username, email, phone, date, address, gender, pictures FROM users")
     .then((result) => {
       const response = {
         total: result.rowCount,

@@ -19,9 +19,10 @@ const getAllUsers = (_, res) => {
 const deleteUsersbyId = (req, res) => {
   const id = req.params;
   deleteDataUsersfromServer(id)
-    .then(({ data }) => {
+    .then(({ data, msg }) => {
       res.status(200).json({
         data,
+        msg: 'Data Deleted !',
         err: null,
       });
     })

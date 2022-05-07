@@ -5,10 +5,10 @@ const Router = express.Router();
 const promosController = require("../controllers/promos");
 const validate = require("../middlewares/validate");
 
-Router.post("/", promosController.postNewPromos);
-Router.get("/all", promosController.getAllPromos);
+Router.post("/", validate.promosData, promosController.postNewPromos);
+Router.get("/find", promosController.findPromos);
 Router.patch("/:id", promosController.patchUpdatePromos);
 Router.delete("/:id", promosController.deletePromosbyId);
-Router.get("/", promosController.findPromosByQuery);
+Router.get("/", promosController.sortPromosByQuery);
 
 module.exports = Router;

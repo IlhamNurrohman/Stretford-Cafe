@@ -17,6 +17,32 @@ const createNewProducts = (body) => {
     });
 };
 
+const findProducts = (query) => {
+    return new Promise((resolve, reject) => {
+        // asumsikan query berisikan title, order, sort
+        const { find } = query;
+        let sqlQuery =
+            "select products.name, products.price, products.pictures from products join categories on products.categories_id = categories.id";
+        if (find){
+            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') ";
+        }
+        db.query(sqlQuery, [find])
+            .then((result) => {
+                if (result.rows.length === 0) {
+                    return reject({ status: 404, err: "Product Not Found" });
+                }
+                const response = {
+                    total: result.rowCount,
+                    data: result.rows,
+                };
+                resolve(response);
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            });
+    });
+};
+
 const updateProducts = (params, body) => {
     return new Promise((resolve, reject) => {
         const { id } = params
@@ -57,15 +83,15 @@ const deleteDataProductsfromServer = (params) => {
 const sortProducts = (query) => {
     return new Promise((resolve, reject) => {
         // asumsikan query berisikan title, order, sort
-        const { categories, find, order, sort } = query;
+        const { categories, order, sort } = query;
         let sqlQuery =
-            "select products.name, products.price, products.pictures  from products";
+            "select products.name, products.price, products.pictures  from products join categories on products.categories_id = categories.id ";
         if (categories) {
-            sqlQuery += " join categories on products.categories_id = categories.id where lower(categories.name) = lower('" + categories + "') ";
+            sqlQuery += " where lower(categories.name) = lower('" + categories + "') ";
         }
-        if (find) {
-            sqlQuery += " and lower(products.name) = lower('" + find + "') ";
-        }
+        // if (find) {
+        //     sqlQuery += " and lower(products.name) like lower('%' || $1 || '%') ";
+        // }
         if (order) {
             sqlQuery += " order by " + sort + " " + order;
         }
@@ -88,7 +114,7 @@ const sortProducts = (query) => {
 
 const sortProductsTransactions = () => {
     return new Promise((resolve, reject) => {
-        db.query("select p.name, p.price, p.pictures from products p join product_details pd on p.id = pd.products_id join transactions t on pd.id = t.product_details_id group by p.name, p.price, p.pictures order by count(*) desc")
+        db.query("select p.name, p.price, p.pictures from products p join transactions t on p.id = t.products_id group by p.name, p.price, p.pictures order by count(*) desc")
             .then((result) => {
                 const response = {
                     total: result.rowCount,
@@ -104,6 +130,7 @@ const sortProductsTransactions = () => {
 
 module.exports = {
     createNewProducts,
+    findProducts,
     updateProducts,
     deleteDataProductsfromServer,
     sortProducts,

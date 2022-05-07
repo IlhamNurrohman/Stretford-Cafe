@@ -55,7 +55,8 @@ const deleteTransactionsbyId = (req, res) => {
         .then(({ data, msg }) => {
             res.status(200).json({
                 data,
-                msg: "Data Deleted !",                err: null,
+                msg: "Data Deleted !",                
+                err: null,
             });
         })
         .catch((error) => {
