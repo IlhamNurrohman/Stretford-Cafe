@@ -5,7 +5,7 @@ const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
 
 const postNewTransactions = (req, res) => {
-    createNewTransactions(req.params, req.body)
+    createNewTransactions(req.body)
         .then(({ data }) => {
             res.status(200).json({
                 err: null,
@@ -52,10 +52,10 @@ const patchUpdateTransactions = (req, res) => {
 const deleteTransactionsbyId = (req, res) => {
     const id = req.params;
     deleteDataTransactionsfromServer(id)
-        .then(({ data }) => {
+        .then(({ data, msg }) => {
             res.status(200).json({
                 data,
-                err: null,
+                msg: "Data Deleted !",                err: null,
             });
         })
         .catch((error) => {

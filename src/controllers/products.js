@@ -1,5 +1,5 @@
 const productsModel = require("../models/products");
-const { createNewProducts, getAllProductsfromServer, updateProducts, deleteDataProductsfromServer, findProducts, filterProductCoffee, sortProductsTransactions, sortProducts } =
+const { createNewProducts, updateProducts, deleteDataProductsfromServer, sortProductsTransactions, sortProducts } =
     productsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -18,18 +18,6 @@ const postNewProduts = (req, res) => {
             });
         });
 };
-
-const getAllProducts = (_, res) => {
-    getAllProductsfromServer()
-        .then((result) => {
-            const { total, data } = result;
-            successResponse(res, 200, data, total);
-        })
-        .catch((error) => {
-            const { err, status } = error;
-            errorResponse(res, status, err);
-        });
-}
 
 const patchUpdateProducts = (req, res) => {
     updateProducts(req.params, req.body)
@@ -51,101 +39,15 @@ const patchUpdateProducts = (req, res) => {
 const deleteProductsbyId = (req, res) => {
     const id = req.params;
     deleteDataProductsfromServer(id)
-        .then(({ data }) => {
+        .then(({ data, msg }) => {
             res.status(200).json({
                 data,
+                msg: 'Data Deleted !',
                 err: null,
             });
         })
         .catch((error) => {
             const { err, status } = error;
-            res.status(status).json({
-                data: [],
-                err,
-            });
-        });
-};
-
-const findProductsByQuery = (req, res) => {
-    findProducts(req.query)
-        .then(({ data, total }) => {
-            res.status(200).json({
-                err: null,
-                data,
-                total,
-            });
-        })
-        .catch(({ status, err }) => {
-            res.status(status).json({
-                data: [],
-                err,
-            });
-        });
-};
-
-const filterCategoriesCoffee = (req, res) => {
-    filterProductCoffee(req.query)
-        .then((result) => {
-            const { total, data } = result;
-            successResponse(res, 200, data, total);
-        })
-        .catch((error) => {
-            const { err, status } = error;
-            errorResponse(res, status, err);
-        });
-}
-
-const filterCategoriesNonCoffee = (_, res) => {
-    filterProductNonCoffee()
-        .then((result) => {
-            const { total, data } = result;
-            successResponse(res, 200, data, total);
-        })
-        .catch((error) => {
-            const { err, status } = error;
-            errorResponse(res, status, err);
-        });
-}
-
-const filterCategoriesFood = (_, res) => {
-    filterProductFood()
-        .then((result) => {
-            const { total, data } = result;
-            successResponse(res, 200, data, total);
-        })
-        .catch((error) => {
-            const { err, status } = error;
-            errorResponse(res, status, err);
-        });
-}
-
-const sortProductsByPrice = (_, res) => {
-    sortProductsPrice()
-        .then(({ data, total }) => {
-            res.status(200).json({
-                err: null,
-                data,
-                total,
-            });
-        })
-        .catch(({ status, err }) => {
-            res.status(status).json({
-                data: [],
-                err,
-            });
-        });
-};
-
-const sortProductsByTime = (_, res) => {
-    sortProductsTime()
-        .then(({ data, total }) => {
-            res.status(200).json({
-                err: null,
-                data,
-                total,
-            });
-        })
-        .catch(({ status, err }) => {
             res.status(status).json({
                 data: [],
                 err,
@@ -172,32 +74,20 @@ const sortProductsByTransactions = (_, res) => {
 
 const sortProductsByQuery = (req, res) => {
     sortProducts(req.query)
-        .then(({ data, total }) => {
-            res.status(200).json({
-                err: null,
-                data,
-                total,
-            });
+        .then((result) => {
+            const { total, data } = result;
+            successResponse(res, 200, data, total);
         })
-        .catch(({ status, err }) => {
-            res.status(status).json({
-                data: [],
-                err,
-            });
+        .catch((error) => {
+            const { err, status } = error;
+            errorResponse(res, status, err);
         });
 };
 
 module.exports = {
     postNewProduts,
-    getAllProducts,
     patchUpdateProducts,
     deleteProductsbyId,
-    findProductsByQuery,
-    filterCategoriesCoffee,
-    filterCategoriesNonCoffee,
-    filterCategoriesFood,
-    sortProductsByPrice,
-    sortProductsByTime,
     sortProductsByTransactions,
     sortProductsByQuery,
 };

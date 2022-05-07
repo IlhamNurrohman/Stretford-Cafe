@@ -93,7 +93,7 @@ validate.transactionsData = (req, res, next) => {
     (key) => key === "date" || key === "sub_total" || key === "payments_methods_id" || key === "product_details_id" || key === "created_at" || key === "updated_at"
   );
   // diinginkan ada ketiga body diatas
-  if (validBody.length < 6) {
+  if (validBody.length < 4) {
     return res.status(400).json({
       err: "Body harus berisikan data lengkap",
     });
@@ -157,7 +157,7 @@ validate.sizesData = (req, res, next) => {
     (key) => key === "name" || key === "description"
   );
   // diinginkan ada ketiga body diatas
-  if (validBody.length < 2) {
+  if (validBody.length < 1) {
     return res.status(400).json({
       err: "Body harus berisikan data lengkap",
     });

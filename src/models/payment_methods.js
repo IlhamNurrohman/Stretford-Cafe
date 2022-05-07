@@ -61,6 +61,7 @@ const deleteDataPaymentMethodsfromServer = (params) => {
                 }
                 const response = {
                     data: data.rows[0],
+                    msg: "Data Terhapus"
                 }
             })
             .catch((err) => {

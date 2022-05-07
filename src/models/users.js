@@ -57,7 +57,7 @@ const createNewUsers = (body) => {
       const { id } = params
       const { username, email, password, phone, date, address, gender, pictures } = body;
       const sqlQuery =
-        "UPDATE users SET username=$1, email=$2, password=$3, phone=$4, date=$5, address=$6, gender=$7, pictures=$8 where id=$9 returning *";
+        "UPDATE users SET username=COALESCE(NULLIF($1, ''), username ), email=COALESCE(NULLIF($2, ''), email ), password=COALESCE(NULLIF($3, ''), password ), phone=COALESCE($4, phone ), date=COALESCE($5, date ), address=COALESCE(NULLIF($6, ''), address ), gender=COALESCE(NULLIF($7, ''), gender ), pictures=COALESCE(NULLIF($8, ''), pictures ) where id=$9 returning *";
       db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, id])
       //db.query(`UPDATE users SET username = ${data.username}, email = ${data.email}, password = ${data.password}, phone = ${data.phone}, date = ${data.date}, address = ${data.address}, gender = ${data.gender}, pictures = ${data.pictures} where id=${id}`)
       .then((result) => {

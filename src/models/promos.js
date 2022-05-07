@@ -38,7 +38,7 @@ const updatePromos = (params, body) => {
         const { id } = params
         const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures } = body;
         const sqlQuery =
-            "UPDATE promos SET name_product=$1, normal_price=$2, description=$3, sizes_id=$4, delivery_methods_id=$5, discount=$6, start_date=$7, end_date=$8, coupon_code=$9, pictures=$10 where id=$11 returning *";
+            "UPDATE promos SET name_product=COALESCE($1, name_product), normal_price=COALESCE($2, normal_price), description=COALESCE($3, description), sizes_id=COALESCE($4, sizes_id), delivery_methods_id=COALESCE($5, delivery_methods_id), discount=COALESCE($6, discount), start_date=COALESCE($7, start_date), end_date=COALESCE($8, end_date), coupon_code=COALESCE($9, coupon_code), pictures=COALESCE($10, pictures) where id=$11 returning *";
         db.query(sqlQuery, [name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, id])
             .then((result) => {
                 resolve({
@@ -72,10 +72,19 @@ const deleteDataPromosfromServer = (params) => {
 const findPromos = (query) => {
     return new Promise((resolve, reject) => {
       // asumsikan query berisikan title, order, sort
-      const coupon_code = query.coupon_code;
+      const { categories, find, order, sort } = query;
       let sqlQuery =
-        "select * from promos where lower(coupon_code) like lower('%' || $1 || '%')";
-      db.query(sqlQuery, [`%${coupon_code}%`])
+        "select * from promos";
+        if (categories) {
+            sqlQuery += " join categories on promos.categories_id = categories.id where lower(categories.name) = lower('" + categories + "') ";
+        }
+        if (find) {
+            sqlQuery += " and lower(promos.coupon_code) = lower('" + find + "') ";
+        }
+        if (order) {
+            sqlQuery += " order by " + sort + " " + order;
+        }
+      db.query(sqlQuery)
         .then((result) => {
           if (result.rows.length === 0) {
             return reject({ status: 404, err: "Promo Not Found" });

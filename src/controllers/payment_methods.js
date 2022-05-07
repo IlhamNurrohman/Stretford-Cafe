@@ -52,9 +52,10 @@ const patchUpdatePaymentMethods = (req, res) => {
 const deletePaymentMethodsbyId = (req, res) => {
     const id = req.params;
     deleteDataPaymentMethodsfromServer(id)
-        .then(({ data }) => {
+        .then(({ data, msg }) => {
             res.status(200).json({
                 data,
+                msg: "Data Deleted !",
                 err: null,
             });
         })

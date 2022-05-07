@@ -3,10 +3,10 @@ const db = require("../config/db");
 
 const createNewTransactions = (body) => {
     return new Promise((resolve, reject) => {
-        const { date, sub_total, id_payment_method, product_details_id } = body;
+        const { date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id } = body;
         const sqlQuery =
-            "INSERT INTO transactions (date, sub_total, payment_method_id, product_details_id) VALUES ($1, $2, $3, $4) returning *";
-        db.query(sqlQuery, [date, sub_total, id_payment_method, product_details_id])
+            "INSERT INTO transactions (date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *";
+        db.query(sqlQuery, [date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -36,10 +36,10 @@ const getAllTransactionsfromServer = () => {
 const updateTransactions = (params, body) => {
     return new Promise((resolve, reject) => {
         const { id } = params
-        const { date, sub_total, id_payment_method, product_details_id } = body;
+        const { date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id } = body;
         const sqlQuery =
-            "UPDATE transactions SET date=$1, sub_total=$2, payment_method_id=$3, product_details_id=$4 where id=$5 returning *";
-        db.query(sqlQuery, [date, sub_total, id_payment_method, product_details_id, id])
+            "UPDATE transactions SET date=COALESCE($1, date), sub_total=COALESCE($2, sub_total), payment_methods_id=COALESCE($3, payment_methods_id), created_at=COALESCE($4, created_at), updated_at=COALESCE($5, updated_at), products_id=COALESCE($6, products_id), qty=COALESCE($7, qty), users_id=COALESCE($8, users_id), delivery_methods_id=COALESCE($9, delivery_methods_id), promos_id=COALESCE($10, promos_id) where id=$11 returning *";
+        db.query(sqlQuery, [date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id, id])
             .then((result) => {
                 resolve({
                     data: result.rows,
@@ -60,7 +60,8 @@ const deleteDataTransactionsfromServer = (params) => {
                     return resolve({ status: 404, err: "" })
                 }
                 const response = {
-                    data: data.rows[0],
+                    data: data.rows,
+                    msg: "Data Terhapus"
                 }
             })
             .catch((err) => {

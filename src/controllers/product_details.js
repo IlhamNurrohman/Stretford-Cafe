@@ -5,7 +5,7 @@ const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
 
 const postNewProductDetails = (req, res) => {
-    createNewProductDetails(req.params, req.body)
+    createNewProductDetails(req.body)
         .then(({ data }) => {
             res.status(200).json({
                 err: null,
