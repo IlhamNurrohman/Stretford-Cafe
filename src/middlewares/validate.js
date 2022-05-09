@@ -23,37 +23,6 @@ validate.queryFind = (req, res, next) => {
   next();
 };
 
-validate.usersData = (req, res, next) => {
-  // cek apakah body sesuai dengan yang diinginkan
-  const { body } = req;
-  const validBody = Object.keys(body).filter(
-    (key) => key === "username" || key === "email" || key === "password" || key === "phone" || key === "date" || key === "address" || key === "gender" || key === "pictures"
-  );
-  // diinginkan ada ketiga body diatas
-  if (validBody.length < 4) {
-    return res.status(400).json({
-      err: "Body must contain complete data !",
-    });
-  }
-  next();
-};
-
-validate.productsData = (req, res, next) => {
-  // cek apakah body sesuai dengan yang diinginkan
-  const { body } = req;
-  const validBody = Object.keys(body).filter(
-    (key) => key === "name" || key === "sizes_id" || key === "description" || key === "delivery_methods_id" || key === "start_hours" || key === "end_hours" || key === "stock" || key === "pictures" || key === "categories_id" || key === "price" 
-  );
-  // diinginkan ada ketiga body diatas
-  if (validBody.length < 10) {
-    return res.status(400).json({
-      err: "Body must contain complete data !",
-    });
-  }
-
-  next();
-};
-
 validate.productDetailsData = (req, res, next) => {
   // cek apakah body sesuai dengan yang diinginkan
   const { body } = req;
@@ -74,7 +43,7 @@ validate.promosData = (req, res, next) => {
   // cek apakah body sesuai dengan yang diinginkan
   const { body } = req;
   const validBody = Object.keys(body).filter(
-    (key) => key === "name_product" || key === "normal_price" || key === "description" || key === "sizes_id" || key === "delivery_methods_id" || key === "discount" || key === "start_date" || key === "end_start" || key === "coupon_code" || key === "pictures" || key === "categories_id" || key === "created_at" || key === "updated_at" 
+    (key) => key === "name_product" || key === "normal_price" || key === "description" || key === "sizes_id" || key === "delivery_methods_id" || key === "discount" || key === "start_date" || key === "end_start" || key === "coupon_code" || key === "pictures" || key === "categories_id" || key === "created_at" || key === "updated_at"
   );
   // diinginkan ada ketiga body diatas
   if (validBody.length < 10) {

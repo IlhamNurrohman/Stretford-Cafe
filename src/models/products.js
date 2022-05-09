@@ -3,10 +3,10 @@ const db = require("../config/db");
 
 const createNewProducts = (body) => {
     return new Promise((resolve, reject) => {
-        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price } = body;
+        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at } = body;
         const sqlQuery =
-            "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *";
-        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price])
+            "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning *";
+        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -23,7 +23,7 @@ const findProducts = (query) => {
         const { find } = query;
         let sqlQuery =
             "select products.name, products.price, products.pictures from products join categories on products.categories_id = categories.id";
-        if (find){
+        if (find) {
             sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') ";
         }
         db.query(sqlQuery, [find])
@@ -83,19 +83,27 @@ const deleteDataProductsfromServer = (params) => {
 const sortProducts = (query) => {
     return new Promise((resolve, reject) => {
         // asumsikan query berisikan title, order, sort
-        const { categories, order, sort } = query;
+        const { find, categories, order, sort } = query;
+        let arr = [];
         let sqlQuery =
-            "select products.name, products.price, products.pictures  from products join categories on products.categories_id = categories.id ";
-        if (categories) {
-            sqlQuery += " where lower(categories.name) = lower('" + categories + "') ";
+            "select products.name, products.price, products.pictures from products join categories on products.categories_id = categories.id ";
+        if (find && !categories) {
+            arr.push(find);
+            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') ";
         }
-        // if (find) {
-        //     sqlQuery += " and lower(products.name) like lower('%' || $1 || '%') ";
-        // }
-        if (order) {
+        if (categories && !find) {
+            arr.push(categories);
+            sqlQuery += " where lower(categories.name) = lower($1) ";
+        }
+        if (find && categories) {
+            arr.push(find, categories);
+            sqlQuery += " where lower(products.name) like lower('%' || $2 || '%') and lower(categories.name) = lower($1) ";
+        }
+        if (sort) {
+            //arr.push(sort, order)
             sqlQuery += " order by " + sort + " " + order;
         }
-        db.query(sqlQuery)
+        db.query(sqlQuery, arr)
             .then((result) => {
                 if (result.rows.length === 0) {
                     return reject({ status: 404, err: "Product Not Found" });

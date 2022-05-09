@@ -3,7 +3,7 @@ const express = require("express");
 const Router = express.Router();
 
 const productsController = require("../controllers/products");
-const validate = require("../middlewares/validate");
+const validate = require("../middlewares/products_validate");
 
 Router.post("/", validate.productsData, productsController.postNewProduts);
 Router.get("/", productsController.getfindProducts);

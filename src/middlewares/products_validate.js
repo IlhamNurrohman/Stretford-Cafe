@@ -1,51 +1,64 @@
-const products_validate = {};
-
+const validate = {};
 validate.productsData = (req, res, next) => {
     // cek apakah body sesuai dengan yang diinginkan
-    const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price } = body
-    const { body } = req;
-    const validBody = Object.keys(body).filter(
-      (key) => key === "name" || key === "sizes_id" || key === "description" || key === "delivery_methods_id" || key === "start_hours" || key === "end_hours" || key === "stock" || key === "pictures" || key === "categories_id" || key === "price" 
-    );
-    // diinginkan ada ketiga body diatas
-    if (validBody.length < 3) {
+    const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at } = req.body;
+  
+    if (!name) {
       return res.status(400).json({
-        err: "Body harus berisikan data lengkap",
+        err: "Body Name !",
       });
     }
-    if(typeof name !== "string" ){
-      return "Data harus string"
+    if (!sizes_id) {
+      return res.status(400).json({
+        err: "Body Sizes !",
+      });
     }
-    if(typeof sizes_id !== "number" ){
-      return "Data harus number"
+    if (!description) {
+      return res.status(400).json({
+        err: "Body Descrption !",
+      });
     }
-    if(typeof description !== "string" ){
-      return "Data harus string"
+    if (!delivery_methods_id) {
+      return res.status(400).json({
+        err: "Body Delivery Method !",
+      });
     }
-    if(typeof delivery_methods_id !== "number" ){
-      return "Data harus number"
+    if (!start_hours) {
+      return res.status(400).json({
+        err: "Body Start Hours !",
+      });
     }
-    if(typeof start_hours !== "number" ){
-      return "Data harus number"
+    if (!end_hours) {
+      return res.status(400).json({
+        err: "Body End Hours !",
+      });
     }
-    if(typeof end_hours !== "number" ){
-      return "Data harus number"
+    if (!stock) {
+      return res.status(400).json({
+        err: "Body Stock !",
+      });
     }
-    if(typeof stock !== "number" ){
-      return "Data harus number"
+    if (!pictures) {
+      return res.status(400).json({
+        err: "Body Pictures !",
+      });
     }
-    if(typeof pictures !== "string" ){
-      return "Data harus string"
+    if (!categories_id) {
+      return res.status(400).json({
+        err: "Body Categories !",
+      });
     }
-    if(typeof categories_id !== "number" ){
-      return "Data harus number"
+    if (!price) {
+      return res.status(400).json({
+        err: "Body Price !",
+      });
     }
-    if(typeof price !== "number" ){
-      return "Data harus number"
+    if (!created_at) {
+      return res.status(400).json({
+        err: "Body Created At !",
+      });
     }
-  
-  
     next();
   };
 
-  module.exports = products_validate;
+  module.exports = validate;
