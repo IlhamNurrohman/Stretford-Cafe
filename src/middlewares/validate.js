@@ -74,10 +74,10 @@ validate.promosData = (req, res, next) => {
   // cek apakah body sesuai dengan yang diinginkan
   const { body } = req;
   const validBody = Object.keys(body).filter(
-    (key) => key === "name_product" || key === "normal_price" || key === "description" || key === "sizes_id" || key === "delivery_methods_id" || key === "discount" || key === "start_date" || key === "end_start" || key === "coupon_code" || key === "pictures" 
+    (key) => key === "name_product" || key === "normal_price" || key === "description" || key === "sizes_id" || key === "delivery_methods_id" || key === "discount" || key === "start_date" || key === "end_start" || key === "coupon_code" || key === "pictures" || key === "categories_id" || key === "created_at" || key === "updated_at" 
   );
   // diinginkan ada ketiga body diatas
-  if (validBody.length < 11) {
+  if (validBody.length < 10) {
     return res.status(400).json({
       err: "Body must contain complete data !",
     });

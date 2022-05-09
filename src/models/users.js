@@ -38,10 +38,10 @@ const deleteDataUsersfromServer = (params) => {
 
 const createNewUsers = (body) => {
     return new Promise((resolve, reject) => {
-      const { username, email, password, phone, date, address, gender, pictures } = body;
+      const { username, email, password, phone, date, address, gender, pictures, created_at, updated_at } = body;
       const sqlQuery =
-        "INSERT INTO users(username, email, password, phone, date, address, gender, pictures) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *";
-      db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures])
+        "INSERT INTO users(username, email, password, phone, date, address, gender, pictures, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning username, email, phone";
+      db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, created_at, updated_at])
         .then(({ rows }) => {
           const response = {
             data: rows[0],
@@ -55,10 +55,10 @@ const createNewUsers = (body) => {
   const updateUsers = (params, body) => {
     return new Promise((resolve, reject) => {
       const { id } = params
-      const { username, email, password, phone, date, address, gender, pictures } = body;
+      const { username, email, password, phone, date, address, gender, pictures, created_at, updated_at } = body;
       const sqlQuery =
-        "UPDATE users SET username=COALESCE(NULLIF($1, ''), username ), email=COALESCE(NULLIF($2, ''), email ), password=COALESCE(NULLIF($3, ''), password ), phone=COALESCE($4, phone ), date=COALESCE($5, date ), address=COALESCE(NULLIF($6, ''), address ), gender=COALESCE(NULLIF($7, ''), gender ), pictures=COALESCE(NULLIF($8, ''), pictures ) where id=$9 returning *";
-      db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, id])
+        "UPDATE users SET username=COALESCE($1, username ), email=COALESCE($2, email ), password=COALESCE($3, password ), phone=COALESCE($4, phone ), date=COALESCE($5, date ), address=COALESCE($6, address ), gender=COALESCE($7, gender ), pictures=COALESCE($8, pictures ), created_at=COALESCE($9, created_at ), updated_at=COALESCE($10, updated_at ) where id=$11 returning username, email, phone, date, address, gender, pictures";
+      db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, created_at, updated_at, id])
       //db.query(`UPDATE users SET username = ${data.username}, email = ${data.email}, password = ${data.password}, phone = ${data.phone}, date = ${data.date}, address = ${data.address}, gender = ${data.gender}, pictures = ${data.pictures} where id=${id}`)
       .then((result) => {
          resolve({
