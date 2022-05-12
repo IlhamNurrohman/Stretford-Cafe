@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 
 const mainRouter = require("./src/routes");
 const db = require("./src/config/db");
@@ -24,9 +25,19 @@ db.connect()
         // handler/middleware untuk body berbentuk raw json
         server.use(express.json());
 
+        // pasang cors
+        const corsOptions = {
+            origin: "http://127.0.0.1:5500",
+            methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+            allowedHeaders: ["Content-Type", "Authorization"],
+        };
+        server.use(cors(corsOptions));
+        // server.options("*", cors(corsOptions));
+
+        server.use(express.static("public"));
         // pasang router ke server
         server.use(mainRouter);
-
+        
         // run server at port
         server.listen(PORT, () => {
             console.log(`Server is Running at PORT ${PORT}`);

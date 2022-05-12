@@ -29,12 +29,31 @@ const checkToken = (req, res, next) => {
     { issuer: process.env.JWT_ISSUER },
     (err, payload) => {
       // error handling
+      //console.log(err, payload);
       if (err && err.name === "TokenExpiredError")
         return errorResponse(res, 401, { msg: "You need to Sign in again" });
       req.userPayload = payload;
+      console.log(payload);
       next();
     }
   );
 };
+
+// const roleAuth = (req, res, next) => {
+//   checkAuthorizations(req.payload.authorizations_id,)
+//     .then((role) => {
+//       if (role !== 1) {
+//         return errorResponse(res, 401, { msg: "Your account is not admin" });
+//       }
+//       if (role !== 2) {
+//         return errorResponse(res, 401, { msg: "Your account is not user" });
+//       };
+//       next();
+//     })
+//     .catch((error) => {
+//       const { status, err } = error;
+//       errorResponse(res, status, err);
+//     });
+// };
 
 module.exports = { checkDuplicate, checkToken };

@@ -20,7 +20,6 @@ auth.register = (req, res) => {
           successResponse(res, 201, { msg: "Register Success" }, null);
         })
         .catch((error) => {
-          console.log(error);
           const { status, err } = error;
           errorResponse(res, status, err);
         });
@@ -45,16 +44,17 @@ auth.signIn = async (req, res) => {
     const payload = {
       id: data.id,
       email,
+      auth: data.authorizations_id,
     };
     const jwtOptions = {
       issuer: process.env.JWT_ISSUER,
-      expiresIn: "1000s", // expired in 1000s
+      expiresIn: "10000s", // expired in 1000s
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
     // return
     successResponse(res, 200, { email, token }, null);
   } catch (error) {
-    console.log(error);
+    //console.log(error, payload);
     const { status, err } = error;
     errorResponse(res, status, err);
   }

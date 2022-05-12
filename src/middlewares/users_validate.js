@@ -6,10 +6,10 @@ const validateCreateUsers = [
   (req, res, next) => {
     const { body } = req;
     const validBody = Object.keys(body).filter(
-      (key) => key === "username" || key === "email" || key === "password" || key === "phone" || key === "date" || key === "address" || key === "gender" || key === "pictures"
+      (key) => key === "username" || key === "email" || key === "password" || key === "phone" || key === "date" || key === "address" || key === "gender" || key === "pictures" || key === "authorizations_id"
     );
     const error = validationResult(req);
-    if (validBody.length < 4) {
+    if (validBody.length < 5) {
       return res.status(400).json({
         err: "Body must contain complete data !",
       });
@@ -17,7 +17,8 @@ const validateCreateUsers = [
 
     if (!error.isEmpty()) {
       return res.status(400).json({
-        msg: 'Query must contain email, password and phone_number',
+        msg: 'Create user invalid',
+        error: error.array(),
       });
     }
     next();

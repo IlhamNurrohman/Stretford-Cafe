@@ -1,4 +1,7 @@
 const validate = {};
+const { errorResponse } = require("../helpers/response");
+const jwt = require("jsonwebtoken");
+
 validate.productsData = (req, res, next) => {
     // cek apakah body sesuai dengan yang diinginkan
     const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at } = req.body;
@@ -59,6 +62,19 @@ validate.productsData = (req, res, next) => {
       });
     }
     next();
+  };
+
+  validate.checkAuthorizations = (req, res, next) => {
+    const roles = req.userPayload.authorizaions_id;
+    //const role = bearerToken;
+    if (roles !== 1) {
+      //console.log(roles);
+      return errorResponse(res, 401, { msg: "Your account is not admin" });
+    }
+    //const { id, email, authorizations_id } = payload;
+    req.userPayload = payload;
+    next();
+    
   };
 
   module.exports = validate;

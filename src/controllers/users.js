@@ -55,7 +55,7 @@ const postNewUsers = (req, res) => {
 };
 
 const patchUpdateUsers = (req, res) => {
-  updateUsers(req.params, req.body)
+  updateUsers(req.body)
     .then((result) => {
       const { data, msg } = result
       res.status(200).json({
