@@ -97,7 +97,7 @@ const sortProducts = (query) => {
         }
         if (find && categories) {
             arr.push(find, categories);
-            sqlQuery += " where lower(products.name) like lower('%' || $2 || '%') and lower(categories.name) = lower($1) ";
+            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') and lower(categories.name) = lower($2) ";
         }
         if (sort) {
             //arr.push(sort, order)

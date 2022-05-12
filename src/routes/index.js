@@ -11,6 +11,7 @@ const delivery_methodsRouter = require("./delivery_methods");
 const sizesRouter = require("./sizes");
 const payment_methodsRouter = require("./payment_methods");
 const categoriesRouter = require("./categories");
+const authRouter = require("./auth");
 
 Router.use("/ping", pingRouter);
 Router.use("/users", usersRouter);
@@ -22,5 +23,6 @@ Router.use("/delivery_methods", delivery_methodsRouter);
 Router.use("/sizes", sizesRouter);
 Router.use("/payment_methods", payment_methodsRouter);
 Router.use("/categories", categoriesRouter);
+Router.use("/auth", authRouter);
 
 module.exports = Router;

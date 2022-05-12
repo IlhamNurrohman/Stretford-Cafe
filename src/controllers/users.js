@@ -1,19 +1,20 @@
 const usersModel = require("../models/users");
-const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer} =
+const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer } =
   usersModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
+const bcrypt = require("bcrypt");
 
 const getAllUsers = (_, res) => {
   getAllUsersfromServer()
-  .then((result) => {
-    const { total, data } = result;
-    successResponse(res, 200, data, total);
-  })
-  .catch((error) => {
-    const { err, status } = error;
-    errorResponse(res, status, err);
-  });
+    .then((result) => {
+      const { total, data } = result;
+      successResponse(res, 200, data, total);
+    })
+    .catch((error) => {
+      const { err, status } = error;
+      errorResponse(res, status, err);
+    });
 }
 
 const deleteUsersbyId = (req, res) => {
@@ -36,41 +37,43 @@ const deleteUsersbyId = (req, res) => {
 };
 
 const postNewUsers = (req, res) => {
-    createNewUsers(req.body)
-      .then(({ data }) => {
-        res.status(200).json({
-          err: null,
-          data,
-        });
-      })
-      .catch(({ status, err }) => {
-        res.status(status).json({
-          err,
-          data: [],
-        });
+  createNewUsers(req.body)
+  bcrypt
+    .hash(password, 10)
+    .then(({ data }) => {
+      res.status(200).json({
+        err: null,
+        data,
       });
-  };
-
-  const patchUpdateUsers = (req, res) => {
-    updateUsers(req.params, req.body)
-      .then((result) => {
-        const { data, msg } = result
-        res.status(200).json({
-          data,
-          msg,
-        })
-      })
-      .catch(({ status, err }) => {
-        res.status(status).json({
-          err,
-          data: [],
-        });
+    })
+    .catch(({ status, err }) => {
+      res.status(status).json({
+        err,
+        data: [],
       });
-  };
+    });
+};
 
-  module.exports = { 
-    postNewUsers,
-    getAllUsers,
-    patchUpdateUsers,
-    deleteUsersbyId,
-   };
+const patchUpdateUsers = (req, res) => {
+  updateUsers(req.params, req.body)
+    .then((result) => {
+      const { data, msg } = result
+      res.status(200).json({
+        data,
+        msg,
+      })
+    })
+    .catch(({ status, err }) => {
+      res.status(status).json({
+        err,
+        data: [],
+      });
+    });
+};
+
+module.exports = {
+  postNewUsers,
+  getAllUsers,
+  patchUpdateUsers,
+  deleteUsersbyId,
+};
