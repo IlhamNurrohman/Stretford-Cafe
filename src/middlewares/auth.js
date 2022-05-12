@@ -29,10 +29,11 @@ const checkToken = (req, res, next) => {
     { issuer: process.env.JWT_ISSUER },
     (err, payload) => {
       // error handling
-      //console.log(err, payload);
-      if (err && err.name === "TokenExpiredError")
+      if (err && err.name === "TokenExpiredError"){
         return errorResponse(res, 401, { msg: "You need to Sign in again" });
-      req.userPayload = payload;
+      }
+      const { email, auth } = payload;
+      req.userPayload = { email, auth };
       console.log(payload);
       next();
     }
