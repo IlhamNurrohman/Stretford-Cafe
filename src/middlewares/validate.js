@@ -59,10 +59,10 @@ validate.transactionsData = (req, res, next) => {
   // cek apakah body sesuai dengan yang diinginkan
   const { body } = req;
   const validBody = Object.keys(body).filter(
-    (key) => key === "date" || key === "sub_total" || key === "payments_methods_id" || key === "product_details_id" || key === "created_at" || key === "updated_at" || key === "products_id" || key === "qty" || key === "users_id" || key === "delivery_methods_id" || key === "promos_id"
+    (key) => key === "date" || key === "sub_total" || key === "payment_methods_id" || key === "created_at" || key === "updated_at" || key === "products_id" || key === "qty" || key === "users_id" || key === "delivery_methods_id" || key === "promos_id"
   );
   // diinginkan ada ketiga body diatas
-  if (validBody.length < 11) {
+  if (validBody.length < 10) {
     return res.status(400).json({
       err: "Body must contain complete data !",
     });

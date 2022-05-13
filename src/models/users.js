@@ -1,6 +1,8 @@
 const { response } = require("express");
 const db = require("../config/db");
 const imageUpload = require("../middlewares/upload");
+const multer = require("multer");
+const path = require("path");
 
 const getAllUsersfromServer = () =>{
   return new Promise((resolve, reject) => {
@@ -53,15 +55,15 @@ const createNewUsers = (body) => {
     });
   };
 
-  const updateUsers = (body) => {
+  const updateUsers = (req) => {
     return new Promise((resolve, reject) => {
-      const id  = req.userPayload.id;
-      const { username, email, password, phone, date, address, gender, created_at, updated_at, authorizations_id } = body;
-      const { file = null } = req;
+      const id = req.userPayload.id;
+      const { file = null } = req; 
+      const { username, email, password, phone, date, address, gender, created_at, updated_at, authorizations_id } = req.body;
       const pictures = file.path.replace("public", "").replace(/\\/g, "/");
       const sqlQuery =
-        "UPDATE users SET username=COALESCE($1, username ), email=COALESCE($2, email ), password=COALESCE($3, password ), phone=COALESCE($4, phone ), date=COALESCE($5, date ), address=COALESCE($6, address ), gender=COALESCE($7, gender ), pictures=$8, created_at=COALESCE($9, created_at ), updated_at=COALESCE($10, updated_at ), authorizations_id=COALESCE($11, authorizations_id ) where id=$12 returning username, email, phone, date, address, gender, pictures";
-      db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, created_at, updated_at, authorizations_id ,id])
+        "UPDATE users SET username=COALESCE($1, username ), email=COALESCE($2, email ), password=COALESCE($3, password ), phone=COALESCE($4, phone ), date=COALESCE($5, date ), address=COALESCE($6, address ), gender=COALESCE($7, gender ), pictures=$8 ,created_at=COALESCE($9, created_at ), updated_at=COALESCE($10, updated_at ), authorizations_id=COALESCE($11, authorizations_id ) where id=$12 returning *";
+    db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, created_at, updated_at, authorizations_id, id])
       .then((result) => {
          resolve({
            data: result.rows,

@@ -8,7 +8,7 @@ validate.productsData = (req, res, next) => {
 
   if (!name) {
     return res.status(400).json({
-      err: "Body Name !",
+      err: "Undifined body Name !",
     });
   }
   if (!sizes_id) {
@@ -69,7 +69,7 @@ validate.checkAuthorizations = (req, res, next) => {
   if ( parseInt(roles) !== 1) {
     return errorResponse(res, 401, { msg: "Your account is not admin" });
   }
-  console.log(roles);
+  //console.log(roles);
   next();
 
 };

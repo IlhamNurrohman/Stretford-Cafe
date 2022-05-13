@@ -1,4 +1,5 @@
 const usersModel = require("../models/users");
+const imageUpload = require("../middlewares/upload");
 const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer } =
   usersModel;
 const { successResponse, errorResponse } = require("../helpers/response");
@@ -55,7 +56,7 @@ const postNewUsers = (req, res) => {
 };
 
 const patchUpdateUsers = (req, res) => {
-  updateUsers(req.body)
+  updateUsers(req)
     .then((result) => {
       const { data, msg } = result
       res.status(200).json({

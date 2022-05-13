@@ -1,3 +1,5 @@
+const validate = {};
+const { errorResponse } = require("../helpers/response");
 const { check, validationResult } = require('express-validator');
 const rulesCreateUser = [check('email').isEmail().notEmpty(), check('password').notEmpty(), check('phone_number').toInt().notEmpty()];
 
@@ -25,6 +27,18 @@ const validateCreateUsers = [
   },
 ];
 
+const checkAuthorizations = (req, res, next) => {
+  const roles = req.userPayload.auth;
+  if ( parseInt(roles) !== 2) {
+    return errorResponse(res, 401, { msg: "Your account is not users" });
+  }
+  console.log(roles);
+  next();
+
+};
+
 module.exports = {
   validateCreateUsers,
+  validate,
+  checkAuthorizations,
 };
