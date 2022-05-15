@@ -40,7 +40,7 @@ auth.signIn = async (req, res) => {
     const data = await getPassByUserEmail(email);
     const result = await bcrypt.compare(password, data.password);
     if (!result)
-      return errorResponse(res, 400, { msg: "Email or Password is wrong" });
+      return errorResponse(res, 400, { msg: "Email or Password wrong !" });
     // generate jwt
     const payload = {
       id: data.id,
@@ -49,7 +49,7 @@ auth.signIn = async (req, res) => {
     };
     const jwtOptions = {
       issuer: process.env.JWT_ISSUER,
-      expiresIn: "10000s", // expired in 1000s
+      expiresIn: "10000s", // expired in 10000s
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
     // return
