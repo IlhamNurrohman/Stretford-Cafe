@@ -1,9 +1,11 @@
 const { response } = require("express");
 const db = require("../config/db");
 
-const createNewProducts = (body) => {
+const createNewProducts = (req) => {
     return new Promise((resolve, reject) => {
-        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at } = body;
+        const { file = null } = req;
+        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at, updated_at } = req.body;
+        const pictures = file.path.replace("public", "").replace(/\\/g, "/");
         const sqlQuery =
             "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning *";
         db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at])
@@ -43,10 +45,12 @@ const findProducts = (query) => {
     });
 };
 
-const updateProducts = (params, body) => {
+const updateProducts = (req) => {
     return new Promise((resolve, reject) => {
-        const { id } = params ;
-        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at } = body;
+        const { id } = req.params;
+        const { file = null } = req;
+        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at, updated_at } = req.body;
+        const pictures = file.path.replace("public", "").replace(/\\/g, "/");
         const sqlQuery =
             "UPDATE products SET name = COALESCE(NULLIF($1, ''), name ), sizes_id = COALESCE($2, sizes_id), description = COALESCE(NULLIF($3, ''), description ), delivery_methods_id = COALESCE($4, delivery_methods_id), start_hours = COALESCE($5, start_hours), end_hours = COALESCE($6, end_hours), stock = COALESCE($7, stock), pictures = COALESCE(NULLIF($8, ''), pictures ), categories_id = COALESCE($9, categories_id), price = COALESCE($10, price), created_at = COALESCE($11, created_at), updated_at = COALESCE($12, updated_at) WHERE id=$13 returning *";
         db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at, id])

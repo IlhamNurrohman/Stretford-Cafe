@@ -1,14 +1,14 @@
 const { body } = require("express-validator");
 const db = require("../config/db");
 
-const register = (username, email, hashedPassword, phone, date, address, gender, pictures, authorizations_id) => {
+const register = (username, email, hashedPassword, phone, roles_id) => {
   return new Promise((resolve, reject) => {
       const sqlQuery =
-        "INSERT INTO users (username, email, password, phone, date, address, gender, pictures, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning username, email, phone";
+        "INSERT INTO users (username, email, password, phone, roles_id, created_at) VALUES ($1, $2, $3, $4, $5, $6) returning *";
     const timestamp = new Date(Date.now());
-    const values = [username, email, hashedPassword, phone, date, address, gender, pictures, authorizations_id, timestamp];
+    const values = [username, email, hashedPassword, phone, roles_id, timestamp];
     db.query(sqlQuery, values)
-      .then(() => {
+      .then(() => { 
         resolve();
       })
       .catch((err) => {

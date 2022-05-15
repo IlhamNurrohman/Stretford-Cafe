@@ -9,9 +9,10 @@ const { successResponse, errorResponse } = require("../helpers/response");
 const usersController = require("../controllers/users");
 const validate = require("../middlewares/validate");
 const userValidate = require("../middlewares/users_validate");
+const adminValidate = require("../middlewares/products_validate");
 
 Router.get("/all", usersController.getAllUsers);
-Router.delete("/:id", usersController.deleteUsersbyId);
+Router.delete("/:id", checkToken ,adminValidate.checkAuthorizations, usersController.deleteUsersbyId);
 Router.post("/", userValidate.validateCreateUsers, usersController.postNewUsers);
 Router.patch("/", checkToken, imageUpload.single("pictures"), usersController.patchUpdateUsers);
 

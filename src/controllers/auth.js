@@ -10,16 +10,17 @@ auth.register = (req, res) => {
   // expect sebuah body dengan
   // property email dan pass
   const {
-    body: { username, email, password, phone, date, address, gender, pictures, timestamp },
+    body: { username, email, password, phone, roles_id, timestamp },
   } = req;
   bcrypt
     .hash(password, 10)
     .then((hashedPassword) => {
-      register(username, email, hashedPassword, phone, date, address, gender, pictures, timestamp)
+      register(username, email, hashedPassword, phone, roles_id, timestamp)
         .then(() => {
           successResponse(res, 201, { msg: "Register Success" }, null);
         })
         .catch((error) => {
+          console.log(error);
           const { status, err } = error;
           errorResponse(res, status, err);
         });

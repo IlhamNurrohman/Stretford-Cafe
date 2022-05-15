@@ -4,7 +4,7 @@ const { createNewProducts, updateProducts, deleteDataProductsfromServer, sortPro
 const { successResponse, errorResponse } = require("../helpers/response");
 
 const postNewProduts = (req, res) => {
-    createNewProducts(req.body)
+    createNewProducts(req)
         .then(({ data }) => {
             res.status(200).json({
                 err: null,
@@ -36,7 +36,7 @@ const getfindProducts = (req, res) => {
         });
 };
 const patchUpdateProducts = (req, res) => {
-    updateProducts(req.params, req.body)
+    updateProducts(req)
         .then((result) => {
             const { data, msg } = result
             res.status(200).json({

@@ -3,62 +3,62 @@ const { errorResponse } = require("../helpers/response");
 const jwt = require("jsonwebtoken");
 
 validate.productsData = (req, res, next) => {
-  // cek apakah body sesuai dengan yang diinginkan
+  // cek apakah Undifined body sesuai dengan yang diinginkan
   const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at } = req.body;
 
   if (!name) {
     return res.status(400).json({
-      err: "Undifined body Name !",
+      err: "Undifined Undifined body Name !",
     });
   }
   if (!sizes_id) {
     return res.status(400).json({
-      err: "Body Sizes !",
+      err: "Undifined Undifined body Sizes !",
     });
   }
   if (!description) {
     return res.status(400).json({
-      err: "Body Descrption !",
+      err: "Undifined body Descrption !",
     });
   }
   if (!delivery_methods_id) {
     return res.status(400).json({
-      err: "Body Delivery Method !",
+      err: "Undifined body Delivery Method !",
     });
   }
   if (!start_hours) {
     return res.status(400).json({
-      err: "Body Start Hours !",
+      err: "Undifined body Start Hours !",
     });
   }
   if (!end_hours) {
     return res.status(400).json({
-      err: "Body End Hours !",
+      err: "Undifined body End Hours !",
     });
   }
   if (!stock) {
     return res.status(400).json({
-      err: "Body Stock !",
+      err: "Undifined body Stock !",
     });
   }
-  if (!pictures) {
-    return res.status(400).json({
-      err: "Body Pictures !",
-    });
-  }
+  // if (!pictures) {
+  //   return res.status(400).json({
+  //     err: "Undifined body Pictures !",
+  //   });
+  // }
   if (!categories_id) {
     return res.status(400).json({
-      err: "Body Categories !",
+      err: "Undifined body Categories !",
     });
   }
   if (!price) {
     return res.status(400).json({
-      err: "Body Price !",
+      err: "Undifined body Price !",
     });
   }
   if (!created_at) {
     return res.status(400).json({
-      err: "Body Created At !",
+      err: "Undifined body Created At !",
     });
   }
   next();
