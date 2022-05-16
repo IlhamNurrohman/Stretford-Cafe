@@ -55,12 +55,11 @@ const createNewUsers = (body) => {
     });
   };
 
-  const updateUsers = (req) => {
+  const updateUsers = (req, file) => {
     return new Promise((resolve, reject) => {
       const id = req.userPayload.id;
-      const { file = null } = req; 
       const { username, email, password, phone, date, address, gender, roles_id, created_at, updated_at } = req.body;
-      const pictures = file.path.replace("public", "").replace(/\\/g, "/");
+      const pictures = file ? file.path.replace("public", "").replace(/\\/g, "/") : null ;
       const sqlQuery =
         "UPDATE users SET username=COALESCE($1, username ), email=COALESCE($2, email ), password=COALESCE($3, password ), phone=COALESCE($4, phone ), date=COALESCE($5, date ), address=COALESCE($6, address ), gender=COALESCE($7, gender ), pictures=$8, roles_id=COALESCE($9, roles_id ),created_at=COALESCE($10, created_at ), updated_at=COALESCE($11, updated_at ) where id=$12 returning *";
     db.query(sqlQuery, [username, email, password, phone, date, address, gender, pictures, roles_id, created_at, updated_at, id])

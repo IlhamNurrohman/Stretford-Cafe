@@ -1,19 +1,23 @@
 const validate = {};
 const { errorResponse } = require("../helpers/response");
-const jwt = require("jsonwebtoken");
 
-validate.productsData = (req, res, next) => {
+validate.promosData = (req, res, next) => {
   // cek apakah Undifined body sesuai dengan yang diinginkan
-  const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at } = req.body;
+  const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at } = req.body;
 
-  if (!name) {
+  if (!name_product) {
     return res.status(400).json({
-      err: "Undifined Undifined body Name !",
+      err: "Undifined Undifined body Name Products !",
+    });
+  }
+  if (!normal_price) {
+    return res.status(400).json({
+      err: "Undifined Undifined body Normal Price !",
     });
   }
   if (!sizes_id) {
     return res.status(400).json({
-      err: "Undifined Undifined body Sizes !",
+      err: "Undifined body Sizes !",
     });
   }
   if (!description) {
@@ -26,19 +30,24 @@ validate.productsData = (req, res, next) => {
       err: "Undifined body Delivery Method !",
     });
   }
-  if (!start_hours) {
+  if (!discount) {
     return res.status(400).json({
-      err: "Undifined body Start Hours !",
+      err: "Undifined body Discount !",
     });
   }
-  if (!end_hours) {
+  if (!start_date) {
     return res.status(400).json({
-      err: "Undifined body End Hours !",
+      err: "Undifined body Start Date !",
     });
   }
-  if (!stock) {
+  if (!end_date) {
     return res.status(400).json({
-      err: "Undifined body Stock !",
+      err: "Undifined body End Date !",
+    });
+  }
+  if (!coupon_code) {
+    return res.status(400).json({
+      err: "Undifined body Coupon Code !",
     });
   }
   // if (!pictures) {
@@ -49,11 +58,6 @@ validate.productsData = (req, res, next) => {
   if (!categories_id) {
     return res.status(400).json({
       err: "Undifined body Categories !",
-    });
-  }
-  if (!price) {
-    return res.status(400).json({
-      err: "Undifined body Price !",
     });
   }
   if (!created_at) {

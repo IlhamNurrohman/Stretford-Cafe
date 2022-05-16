@@ -1,9 +1,10 @@
 const { response } = require("express");
 const db = require("../config/db");
 
-const createNewPromos = (body) => {
+const createNewPromos = (req, file) => {
     return new Promise((resolve, reject) => {
-        const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at, updated_at } = body;
+        const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, categories_id, created_at, updated_at } = req.body;
+        const pictures = file ? file.path.replace("public", "").replace(/\\/g, "/") : null ;
         const sqlQuery =
             "INSERT INTO promos (name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) returning *";
         db.query(sqlQuery, [name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at, updated_at])
@@ -42,10 +43,11 @@ const findPromosfromServer = (query) => {
     });
 };
 
-const updatePromos = (params, body) => {
+const updatePromos = (req, file) => {
     return new Promise((resolve, reject) => {
-        const { id } = params
-        const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at, updated_at } = body;
+        const { id } = req.params
+        const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, categories_id, created_at, updated_at } = req.body;
+        const pictures = file ? file.path.replace("public", "").replace(/\\/g, "/") : null ;
         const sqlQuery =
             "UPDATE promos SET name_product=COALESCE($1, name_product), normal_price=COALESCE($2, normal_price), description=COALESCE($3, description), sizes_id=COALESCE($4, sizes_id), delivery_methods_id=COALESCE($5, delivery_methods_id), discount=COALESCE($6, discount), start_date=COALESCE($7, start_date), end_date=COALESCE($8, end_date), coupon_code=COALESCE($9, coupon_code), pictures=COALESCE($10, pictures), categories_id=COALESCE($11, categories_id), created_at=COALESCE($12, created_at), updated_at=COALESCE($13, updated_at) where id=$14 returning *";
         db.query(sqlQuery, [name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at, updated_at, id])

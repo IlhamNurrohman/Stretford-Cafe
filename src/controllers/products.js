@@ -4,7 +4,8 @@ const { createNewProducts, updateProducts, deleteDataProductsfromServer, sortPro
 const { successResponse, errorResponse } = require("../helpers/response");
 
 const postNewProduts = (req, res) => {
-    createNewProducts(req)
+    const { file } = req;
+    createNewProducts(req, file)
         .then(({ data }) => {
             res.status(200).json({
                 err: null,
@@ -36,7 +37,8 @@ const getfindProducts = (req, res) => {
         });
 };
 const patchUpdateProducts = (req, res) => {
-    updateProducts(req)
+    const { file } = req;
+    updateProducts(req, file)
         .then((result) => {
             const { data, msg } = result
             res.status(200).json({
@@ -91,12 +93,51 @@ const sortProductsByTransactions = (_, res) => {
 const sortProductsByQuery = (req, res) => {
     sortProducts(req.query)
         .then((result) => {
-            const { total, data } = result;
-            successResponse(res, 200, data, total);
+            const { data, totalData, totalPage } = result;
+            const { find, categories, sort, order, page = 1, limit } = req.query;
+            let nextPage = "/products?";
+            let prevPage = "/products?";
+            if (find) {
+                nextPage += `find=${find}&`;
+                prevPage += `find=${find}&`;
+            }
+            if (categories) {
+                nextPage += `categories=${categories}&`;
+                prevPage += `categories=${categories}&`;
+            }
+            if (sort) {
+                nextPage += `sort=${sort}&`;
+                prevPage += `sort=${sort}&`;
+            }
+            if (order) {
+                nextPage += `order=${order}&`;
+                prevPage += `order=${order}&`;
+            }
+            if (limit) {
+                nextPage += `limit=${limit}&`;
+                prevPage += `limit=${limit}&`;
+            }            
+            nextPage += `page=${Number(page)+1}`;
+            prevPage += `page=${Number(page)-1}`;
+            const meta = {
+                totalData,
+                totalPage,
+                currentPage: Number(page),
+                nextPage: Number(page) === totalPage ? null : nextPage,
+                prevPage: Number(page) === 1 ? null : prevPage
+            };
+            res.status(200).json({
+                data,
+                meta,
+                err: null
+            });
         })
-        .catch((error) => {
+        .catch(error => {
             const { err, status } = error;
-            errorResponse(res, status, err);
+            res.status(status).json({
+                data: [],
+                err
+            });
         });
 };
 

@@ -4,7 +4,8 @@ const { createNewPromos, findPromosfromServer, updatePromos, deleteDataPromosfro
 const { successResponse, errorResponse } = require("../helpers/response");
 
 const postNewPromos = (req, res) => {
-    createNewPromos(req.body)
+    const { file } = req;
+    createNewPromos(req, file)
         .then(({ data }) => {
             res.status(200).json({
                 err: null,
@@ -32,7 +33,8 @@ const findPromos = (req, res) => {
 }
 
 const patchUpdatePromos = (req, res) => {
-    updatePromos(req.params, req.body)
+    const { file } = req;
+    updatePromos(req, file)
         .then((result) => {
             const { data, msg } = result
             res.status(200).json({

@@ -1,4 +1,5 @@
 const validate = {};
+const { errorResponse } = require("../helpers/response");
 
 validate.queryFind = (req, res, next) => {
   // cek apakah query sesuai dengan yang diinginkan
@@ -31,22 +32,6 @@ validate.productDetailsData = (req, res, next) => {
   );
   // diinginkan ada ketiga body diatas
   if (validBody.length < 6) {
-    return res.status(400).json({
-      err: "Body must contain complete data !",
-    });
-  }
-
-  next();
-};
-
-validate.promosData = (req, res, next) => {
-  // cek apakah body sesuai dengan yang diinginkan
-  const { body } = req;
-  const validBody = Object.keys(body).filter(
-    (key) => key === "name_product" || key === "normal_price" || key === "description" || key === "sizes_id" || key === "delivery_methods_id" || key === "discount" || key === "start_date" || key === "end_start" || key === "coupon_code" || key === "pictures" || key === "categories_id" || key === "created_at" || key === "updated_at"
-  );
-  // diinginkan ada ketiga body diatas
-  if (validBody.length < 10) {
     return res.status(400).json({
       err: "Body must contain complete data !",
     });
@@ -133,6 +118,15 @@ validate.sizesData = (req, res, next) => {
   }
 
   next();
+};
+
+validate.checkAuthorizations = (req, res, next) => {
+  const roles = req.userPayload.auth;
+  if ( parseInt(roles) !== 1) {
+    return errorResponse(res, 401, { msg: "Your account is not admin" });
+  }
+  next();
+
 };
 
 module.exports = validate;

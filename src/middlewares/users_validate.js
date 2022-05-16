@@ -32,7 +32,6 @@ const checkAuthorizations = (req, res, next) => {
   if ( parseInt(roles) !== 2) {
     return errorResponse(res, 401, { msg: "Your account is not users" });
   }
-  console.log(roles);
   next();
 
 };

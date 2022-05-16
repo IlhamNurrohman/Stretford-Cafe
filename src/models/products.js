@@ -1,11 +1,10 @@
 const { response } = require("express");
 const db = require("../config/db");
 
-const createNewProducts = (req) => {
+const createNewProducts = (req, file) => {
     return new Promise((resolve, reject) => {
-        const { file = null } = req;
         const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at, updated_at } = req.body;
-        const pictures = file.path.replace("public", "").replace(/\\/g, "/");
+        const pictures = file ? file.path.replace("public", "").replace(/\\/g, "/") : null ;
         const sqlQuery =
             "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning *";
         db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at])
@@ -45,12 +44,11 @@ const findProducts = (query) => {
     });
 };
 
-const updateProducts = (req) => {
+const updateProducts = (req, file) => {
     return new Promise((resolve, reject) => {
         const { id } = req.params;
-        const { file = null } = req;
         const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at, updated_at } = req.body;
-        const pictures = file.path.replace("public", "").replace(/\\/g, "/");
+        const pictures = file ? file.path.replace("public", "").replace(/\\/g, "/") : null ;
         const sqlQuery =
             "UPDATE products SET name = COALESCE(NULLIF($1, ''), name ), sizes_id = COALESCE($2, sizes_id), description = COALESCE(NULLIF($3, ''), description ), delivery_methods_id = COALESCE($4, delivery_methods_id), start_hours = COALESCE($5, start_hours), end_hours = COALESCE($6, end_hours), stock = COALESCE($7, stock), pictures = COALESCE(NULLIF($8, ''), pictures ), categories_id = COALESCE($9, categories_id), price = COALESCE($10, price), created_at = COALESCE($11, created_at), updated_at = COALESCE($12, updated_at) WHERE id=$13 returning *";
         db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at, id])
@@ -86,26 +84,34 @@ const deleteDataProductsfromServer = (params) => {
 
 const sortProducts = (query) => {
     return new Promise((resolve, reject) => {
-        // asumsikan query berisikan title, order, sort
-        const { find, categories, order, sort } = query;
+        const { find, categories, sort = "categories_id", order = "desc", page = 1, limit = 3 } = query;
+        let offset = (Number(page) - 1) * Number(limit);
+        let totalParam = [];
         let arr = [];
+        let totalQuery = "select count(products.id) as total_products from products join categories on products.categories_id = categories.id";
         let sqlQuery =
-            "select products.name, products.price, products.pictures from products join categories on products.categories_id = categories.id ";
+            "select products.name, products.price, products.pictures, categories.name as category from products join categories on products.categories_id = categories.id";
+        if (!find && !categories) {
+            sqlQuery += " order by " + sort + " " + order + " LIMIT $1 OFFSET $2";
+            arr.push(Number(limit), offset)
+        }
         if (find && !categories) {
-            arr.push(find);
-            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') ";
+            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') order by " + sort + " " + order + " LIMIT $2 OFFSET $3";
+            totalQuery += " where lower(products.name) like lower('%' || $1 || '%')";
+            arr.push(find, Number(limit), offset);
+            totalParam.push(find);
         }
         if (categories && !find) {
-            arr.push(categories);
-            sqlQuery += " where lower(categories.name) = lower($1) ";
+            sqlQuery += " where lower(categories.name) = lower($1) order by " + sort + " " + order + " LIMIT $2 OFFSET $3";
+            totalQuery += " where lower(categories.name) = lower($1)";
+            arr.push(categories, Number(limit), offset);
+            totalParam.push(categories);
         }
         if (find && categories) {
-            arr.push(find, categories);
-            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') and lower(categories.name) = lower($2) ";
-        }
-        if (sort) {
-            //arr.push(sort, order)
-            sqlQuery += " order by " + sort + " " + order;
+            sqlQuery += " where lower(products.name) like lower('%' || $1 || '%') and lower(categories.name) = lower($2) order by " + sort + " " + order + " LIMIT $3 OFFSET $4";
+            totalQuery += " where lower(products.name) like lower('%' || $1 || '%') and lower(categories.name) = lower($2)";
+            arr.push(find, categories, Number(limit), offset);
+            totalParam.push(find, categories);
         }
         db.query(sqlQuery, arr)
             .then((result) => {
@@ -116,7 +122,15 @@ const sortProducts = (query) => {
                     total: result.rowCount,
                     data: result.rows,
                 };
-                resolve(response);
+                db.query(totalQuery, totalParam)
+                    .then((result) => {
+                        response.totalData = Number(result.rows[0]["total_products"]);
+                        response.totalPage = Math.ceil(response.totalData / Number(limit));
+                        resolve(response);
+                    })
+                    .catch(err => {
+                        reject({ status: 500, err });
+                    });
             })
             .catch((err) => {
                 reject({ status: 500, err });

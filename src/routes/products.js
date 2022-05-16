@@ -8,10 +8,9 @@ const { checkToken } = require("../middlewares/auth");
 const imageUpload = require("../middlewares/upload");
 
 Router.post("/", checkToken, validate.checkAuthorizations, imageUpload.single("pictures"), validate.productsData, productsController.postNewProduts);
-Router.get("/", productsController.getfindProducts);
 Router.patch("/:id", checkToken, validate.checkAuthorizations, imageUpload.single("pictures"), productsController.patchUpdateProducts);
-Router.delete("/:id", productsController.deleteProductsbyId);
-Router.get("/sort", productsController.sortProductsByQuery);
+Router.delete("/:id", checkToken, validate.checkAuthorizations, productsController.deleteProductsbyId);
+Router.get("/", productsController.sortProductsByQuery);
 Router.get("/favorite", productsController.sortProductsByTransactions);
 
 module.exports = Router;
