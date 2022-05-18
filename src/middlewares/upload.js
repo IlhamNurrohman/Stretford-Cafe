@@ -30,6 +30,18 @@ const imageUpload = multer({
   storage: imageStorage,
   limits: limit,
   fileFilter: imageOnlyFilter,
-});
+}).single("photo");
 
-module.exports = imageUpload;
+const upImageFile = (req, res, next) => {
+  imageUpload(req, res, (err) => {
+      if (err) {
+          res.status(400).json({
+              error: err.message,
+          });
+          return;
+      }
+      next();
+  });
+};
+
+module.exports = upImageFile;

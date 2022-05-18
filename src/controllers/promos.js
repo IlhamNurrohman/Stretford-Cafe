@@ -71,13 +71,46 @@ const deletePromosbyId = (req, res) => {
 
 const sortPromosByQuery = (req, res) => {
     sortPromos(req.query)
-        .then(({ data, total }) => {
-            res.status(200).json({
-                err: null,
-                data,
-                total,
-            });
-        })
+    .then((result) => {
+        const { data, totalData, totalPage } = result;
+        const { find, categories, sort, order, page = 1, limit } = req.query;
+        let nextPage = "/promos?";
+        let prevPage = "/promos?";
+        if (find) {
+            nextPage += `find=${find}&`;
+            prevPage += `find=${find}&`;
+        }
+        if (categories) {
+            nextPage += `categories=${categories}&`;
+            prevPage += `categories=${categories}&`;
+        }
+        if (sort) {
+            nextPage += `sort=${sort}&`;
+            prevPage += `sort=${sort}&`;
+        }
+        if (order) {
+            nextPage += `order=${order}&`;
+            prevPage += `order=${order}&`;
+        }
+        if (limit) {
+            nextPage += `limit=${limit}&`;
+            prevPage += `limit=${limit}&`;
+        }            
+        nextPage += `page=${Number(page)+1}`;
+        prevPage += `page=${Number(page)-1}`;
+        const meta = {
+            totalData,
+            totalPage,
+            currentPage: Number(page),
+            nextPage: Number(page) === totalPage ? null : nextPage,
+            prevPage: Number(page) === 1 ? null : prevPage
+        };
+        res.status(200).json({
+            data,
+            meta,
+            err: null
+        });
+    })
         .catch(({ status, err }) => {
             res.status(status).json({
                 data: [],

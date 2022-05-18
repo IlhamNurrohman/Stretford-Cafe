@@ -1,4 +1,5 @@
 const { response } = require("express");
+const req = require("express/lib/request");
 const db = require("../config/db");
 
 const createNewTransactions = (body) => {
@@ -19,7 +20,12 @@ const createNewTransactions = (body) => {
 
 const getAllTransactionsfromServer = () => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM transactions")
+        //const roles = req.userPayload.auth;
+        const sqlQuery = "select transactions.date, transactions.qty, transactions.sub_total, transactions.products_id from transactions join users  on transactions.users_id = users.id";
+        // if (parseInt(roles)){
+        //     sqlQuery += " where users.id = " + roles;
+        // }
+        db.query(sqlQuery)
             .then((result) => {
                 const response = {
                     total: result.rowCount,

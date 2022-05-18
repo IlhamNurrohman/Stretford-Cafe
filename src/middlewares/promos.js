@@ -3,7 +3,8 @@ const { errorResponse } = require("../helpers/response");
 
 validate.promosData = (req, res, next) => {
   // cek apakah Undifined body sesuai dengan yang diinginkan
-  const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, pictures, categories_id, created_at } = req.body;
+  const { name_product, normal_price, description, sizes_id, delivery_methods_id, discount, start_date, end_date, coupon_code, categories_id, created_at } = req.body;
+  const pictures = req.file;
 
   if (!name_product) {
     return res.status(400).json({
@@ -50,11 +51,11 @@ validate.promosData = (req, res, next) => {
       err: "Undifined body Coupon Code !",
     });
   }
-  // if (!pictures) {
-  //   return res.status(400).json({
-  //     err: "Undifined body Pictures !",
-  //   });
-  // }
+  if (!pictures) {
+    return res.status(400).json({
+      err: "Undifined body Pictures !",
+    });
+  }
   if (!categories_id) {
     return res.status(400).json({
       err: "Undifined body Categories !",

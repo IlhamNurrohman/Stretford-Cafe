@@ -6,12 +6,48 @@ const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
 const bcrypt = require("bcrypt");
 
-const getAllUsers = (_, res) => {
-  getAllUsersfromServer()
-    .then((result) => {
-      const { total, data } = result;
-      successResponse(res, 200, data, total);
-    })
+const getAllUsers = (req, res) => {
+  getAllUsersfromServer(req.query)
+  .then((result) => {
+    const { data, totalData, totalPage } = result;
+    const { find, categories, sort, order, page = 1, limit } = req.query;
+    let nextPage = "/users/all?";
+    let prevPage = "/users/all?";
+    if (find) {
+        nextPage += `find=${find}&`;
+        prevPage += `find=${find}&`;
+    }
+    if (categories) {
+        nextPage += `categories=${categories}&`;
+        prevPage += `categories=${categories}&`;
+    }
+    if (sort) {
+        nextPage += `sort=${sort}&`;
+        prevPage += `sort=${sort}&`;
+    }
+    if (order) {
+        nextPage += `order=${order}&`;
+        prevPage += `order=${order}&`;
+    }
+    if (limit) {
+        nextPage += `limit=${limit}&`;
+        prevPage += `limit=${limit}&`;
+    }            
+    nextPage += `page=${Number(page)+1}`;
+    prevPage += `page=${Number(page)-1}`;
+    const meta = {
+        totalData,
+        totalPage,
+        currentPage: Number(page),
+        nextPage: Number(page) === totalPage ? null : nextPage,
+        prevPage: Number(page) === 1 ? null : prevPage
+    };
+    res.status(200).json({
+        data,
+        meta,
+        err: null
+    });
+})
     .catch((error) => {
       const { err, status } = error;
       errorResponse(res, status, err);

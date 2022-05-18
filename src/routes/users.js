@@ -2,7 +2,7 @@ const express = require("express");
 
 const Router = express.Router();
 const { checkToken } = require("../middlewares/auth");
-const imageUpload = require("../middlewares/upload");
+const  upImageFile = require("../middlewares/upload");
 const db = require("../config/db");
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -11,10 +11,10 @@ const validate = require("../middlewares/validate");
 const userValidate = require("../middlewares/users_validate");
 const adminValidate = require("../middlewares/products_validate");
 
-Router.get("/all", usersController.getAllUsers);
-Router.delete("/:id", checkToken ,adminValidate.checkAuthorizations, usersController.deleteUsersbyId);
-Router.post("/", userValidate.validateCreateUsers, usersController.postNewUsers);
-Router.patch("/", checkToken, imageUpload.single("pictures"), usersController.patchUpdateUsers);
+Router.get("/all", checkToken, adminValidate.checkAuthorizations, usersController.getAllUsers);
+Router.delete("/:id", checkToken , adminValidate.checkAuthorizations, usersController.deleteUsersbyId);
+Router.post("/", usersController.postNewUsers);
+Router.patch("/", checkToken , upImageFile, usersController.patchUpdateUsers);
 
 // Router.patch("/", checkToken, imageUpload.single("pictures"), (req, res) => {
 //     const id = req.userPayload.id;

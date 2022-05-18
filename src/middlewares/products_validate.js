@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 validate.productsData = (req, res, next) => {
   // cek apakah Undifined body sesuai dengan yang diinginkan
   const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at } = req.body;
-
+  const pictures = req.file;
   if (!name) {
     return res.status(400).json({
       err: "Undifined Undifined body Name !",
@@ -41,11 +41,11 @@ validate.productsData = (req, res, next) => {
       err: "Undifined body Stock !",
     });
   }
-  // if (!pictures) {
-  //   return res.status(400).json({
-  //     err: "Undifined body Pictures !",
-  //   });
-  // }
+  if (!pictures) {
+    return res.status(400).json({
+      err: "Undifined body Pictures !",
+    });
+  }
   if (!categories_id) {
     return res.status(400).json({
       err: "Undifined body Categories !",

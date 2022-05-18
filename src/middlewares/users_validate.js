@@ -1,14 +1,14 @@
 const validate = {};
 const { errorResponse } = require("../helpers/response");
 const { check, validationResult } = require('express-validator');
-const rulesCreateUser = [check('email').isEmail().notEmpty(), check('password').notEmpty(), check('phone_number').toInt().notEmpty()];
+const rulesCreateUser = [check('email').isEmail().notEmpty(), check('password').notEmpty(), check('phone').toInt().notEmpty()];
 
 const validateCreateUsers = [
   rulesCreateUser,
   (req, res, next) => {
     const { body } = req;
     const validBody = Object.keys(body).filter(
-      (key) => key === "username" || key === "email" || key === "password" || key === "phone" || key === "date" || key === "address" || key === "gender" || key === "pictures" || key === "authorizations_id"
+      (key) => key === "username" || key === "email" || key === "password" || key === "phone" || key === "date" || key === "address" || key === "gender" || key === "pictures" || key === "roles_id"
     );
     const error = validationResult(req);
     if (validBody.length < 5) {
