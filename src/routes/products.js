@@ -12,5 +12,6 @@ Router.patch("/:id", checkToken, validate.checkAuthorizations, upImageFile, prod
 Router.delete("/:id", checkToken, validate.checkAuthorizations, productsController.deleteProductsbyId);
 Router.get("/", productsController.sortProductsByQuery);
 Router.get("/favorite", productsController.sortProductsByTransactions);
+Router.get("/detail/:id", productsController.getProductsById);
 
 module.exports = Router;

@@ -11,18 +11,18 @@ const validateCreateUsers = [
       (key) => key === "username" || key === "email" || key === "password" || key === "phone" || key === "date" || key === "address" || key === "gender" || key === "pictures" || key === "roles_id"
     );
     const error = validationResult(req);
-    if (validBody.length < 5) {
-      return res.status(400).json({
-        err: "Body must contain complete data !",
-      });
-    }
+    // if (validBody.length < 4) {
+    //   return res.status(400).json({
+    //     err: "Body must contain complete data !",
+    //   });
+    // }
 
-    if (!error.isEmpty()) {
-      return res.status(400).json({
-        msg: 'Create user invalid',
-        error: error.array(),
-      });
-    }
+    // if (!error.isEmpty()) {
+    //   return res.status(400).json({
+    //     msg: 'Create user invalid',
+    //     error: error.array(),
+    //   });
+    // }
     next();
   },
 ];

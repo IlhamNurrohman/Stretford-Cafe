@@ -20,8 +20,9 @@ const postNewTransactions = (req, res) => {
         });
 };
 
-const getAllTransactions = (_, res) => {
-    getAllTransactionsfromServer()
+const getAllTransactions = (req, res) => {
+    const id = req.userPayload.id;
+    getAllTransactionsfromServer(id)
         .then((result) => {
             const { total, data } = result;
             successResponse(res, 200, data, total);

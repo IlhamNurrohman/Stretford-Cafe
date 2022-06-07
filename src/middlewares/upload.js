@@ -30,11 +30,12 @@ const imageUpload = multer({
   storage: imageStorage,
   limits: limit,
   fileFilter: imageOnlyFilter,
-}).single("photo");
+}).single("pictures");
 
 const upImageFile = (req, res, next) => {
   imageUpload(req, res, (err) => {
       if (err) {
+        console.log(err);
           res.status(400).json({
               error: err.message,
           });

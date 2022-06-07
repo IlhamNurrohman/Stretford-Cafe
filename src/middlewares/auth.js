@@ -32,8 +32,9 @@ const checkToken = (req, res, next) => {
       if (err && err.name === "TokenExpiredError"){
         return errorResponse(res, 401, { msg: "You need to Sign in again" });
       }
-      const { id, email, auth } = payload;
-      req.userPayload = { id, email, auth };
+      console.log(err);
+      const { id, email, username, phone, date, address, gender, pictures, auth } = payload;
+      req.userPayload = { id, email, username, phone, date, address, gender, pictures, auth };
       next();
     }
   );

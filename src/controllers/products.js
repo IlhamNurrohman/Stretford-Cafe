@@ -1,5 +1,5 @@
 const productsModel = require("../models/products");
-const { createNewProducts, updateProducts, deleteDataProductsfromServer, sortProductsTransactions, sortProducts, findProducts } =
+const { createNewProducts, updateProducts, deleteDataProductsfromServer, sortProductsTransactions, sortProducts, findProducts, getSingleProductsFromServer } =
     productsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -140,6 +140,23 @@ const sortProductsByQuery = (req, res) => {
             });
         });
 };
+const getProductsById = (req, res) => {
+    const { id } = req.params;
+    getSingleProductsFromServer(id)
+        .then((result) => {
+            const { data } = result;
+            res.status(200).json({
+                data,
+                err: null
+            });
+        }).catch(error => {
+            const { err, status } = error;
+            res.status(status).json({
+                err,
+                data: []
+            });
+        });
+};
 
 module.exports = {
     postNewProduts,
@@ -148,4 +165,5 @@ module.exports = {
     deleteProductsbyId,
     sortProductsByTransactions,
     sortProductsByQuery,
+    getProductsById
 };

@@ -12,6 +12,7 @@ const userValidate = require("../middlewares/users_validate");
 const adminValidate = require("../middlewares/products_validate");
 
 Router.get("/all", checkToken, adminValidate.checkAuthorizations, usersController.getAllUsers);
+Router.get("/profile-detail", checkToken, usersController.getUsersLoginOnli);
 Router.delete("/:id", checkToken , adminValidate.checkAuthorizations, usersController.deleteUsersbyId);
 Router.post("/", usersController.postNewUsers);
 Router.patch("/", checkToken , upImageFile, usersController.patchUpdateUsers);

@@ -1,6 +1,6 @@
 const usersModel = require("../models/users");
 const imageUpload = require("../middlewares/upload");
-const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer } =
+const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer, getUsersLogin } =
   usersModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
@@ -91,6 +91,25 @@ const postNewUsers = (req, res) => {
     });
 };
 
+const getUsersLoginOnli = (req, res) => {
+  const id = req.userPayload.id;
+  getUsersLogin(id)
+    .then((result) => {
+      const { data, msg } = result
+      res.status(200).json({
+        data,
+        msg,
+      })
+    })
+    .catch((error) => {
+      console.log(error)
+      // res.status(status).json({
+      //   err,
+      //   data: [],
+      // });
+    });
+};
+
 const patchUpdateUsers = (req, res) => {
   const { file } = req;
   updateUsers(req, file)
@@ -114,4 +133,5 @@ module.exports = {
   getAllUsers,
   patchUpdateUsers,
   deleteUsersbyId,
+  getUsersLoginOnli,
 };

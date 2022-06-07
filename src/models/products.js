@@ -84,7 +84,7 @@ const deleteDataProductsfromServer = (params) => {
 
 const sortProducts = (query) => {
     return new Promise((resolve, reject) => {
-        const { find, categories, sort = "categories_id", order = "desc", page = 1, limit = 3 } = query;
+        const { find, categories, sort = "categories_id", order = "desc", page = 1, limit = 12 } = query;
         let offset = (Number(page) - 1) * Number(limit);
         let totalParam = [];
         let arr = [];
@@ -154,6 +154,26 @@ const sortProductsTransactions = () => {
     });
 };
 
+const getSingleProductsFromServer = (id) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = "select products.name, sizes.name_size, products.description, delivery_methods.name as delivery , products.start_hours, products.end_hours, products.stock, products.price, products.pictures, categories.name as category from products join sizes on products.sizes_id = sizes.id join delivery_methods on products.delivery_methods_id = delivery_methods.id join categories on products.categories_id = categories.id where products.id = $1";
+        db.query(sqlQuery, [id])
+            .then((result) => {
+                if (result.rows.length === 0) {
+                    return reject({ status: 404, err: "Product Not Found" });
+                }
+                const response = {
+                    data: result.rows
+                };
+                resolve(response);
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            });
+    });
+};
+
+
 module.exports = {
     createNewProducts,
     findProducts,
@@ -161,6 +181,7 @@ module.exports = {
     deleteDataProductsfromServer,
     sortProducts,
     sortProductsTransactions,
+    getSingleProductsFromServer,
 };
 
 

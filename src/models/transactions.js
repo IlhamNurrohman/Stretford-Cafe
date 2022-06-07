@@ -18,14 +18,13 @@ const createNewTransactions = (body) => {
     });
 };
 
-const getAllTransactionsfromServer = () => {
+const getAllTransactionsfromServer = (id) => {
     return new Promise((resolve, reject) => {
-        const roles = req.userPayload.auth;
-        const sqlQuery = "select transactions.date, transactions.qty, transactions.sub_total, transactions.products_id from transactions join users  on transactions.users_id = users.id";
-        if (parseInt(roles)){
-            sqlQuery;
-        }
-        db.query(sqlQuery)
+        const sqlQuery = "select transactions.sub_total, products.name, products.pictures, delivery_methods.name as delivery from transactions join delivery_methods on transactions.delivery_methods_id = delivery_methods.id join products on transactions.products_id = products.id join users  on transactions.users_id = users.id  where transactions.users_id = $1";
+        // if (parseInt(roles)){
+        //     sqlQuery;
+        // }
+        db.query(sqlQuery, [id])
             .then((result) => {
                 const response = {
                     total: result.rowCount,
