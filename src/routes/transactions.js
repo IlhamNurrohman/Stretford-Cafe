@@ -8,7 +8,7 @@ const { checkToken } = require("../middlewares/auth");
 const { checkAuthorizations } = require("../middlewares/users_validate");
 
 Router.post("/", checkToken, checkAuthorizations, validate.transactionsData, transactionsController.postNewTransactions);
-Router.get("/all", checkToken, transactionsController.getAllTransactions);
+Router.get("/", checkToken, transactionsController.getAllTransactions);
 Router.patch("/:id", checkToken, validate.checkAuthorizations, transactionsController.patchUpdateTransactions);
 Router.delete("/:id", checkToken, validate.checkAuthorizations, transactionsController.deleteTransactionsbyId);
 

@@ -90,7 +90,7 @@ const sortProducts = (query) => {
         let arr = [];
         let totalQuery = "select count(products.id) as total_products from products join categories on products.categories_id = categories.id";
         let sqlQuery =
-            "select products.name, products.price, products.pictures, categories.name as category from products join categories on products.categories_id = categories.id";
+            "select products.id, products.name, products.price, products.pictures, categories.name as category from products join categories on products.categories_id = categories.id";
         if (!find && !categories) {
             sqlQuery += " order by " + sort + " " + order + " LIMIT $1 OFFSET $2";
             arr.push(Number(limit), offset)
@@ -140,7 +140,7 @@ const sortProducts = (query) => {
 
 const sortProductsTransactions = () => {
     return new Promise((resolve, reject) => {
-        db.query("select p.name, p.price, p.pictures from products p join transactions t on p.id = t.products_id group by p.name, p.price, p.pictures order by count(*) desc")
+        db.query("select p.id, p.name, p.price, p.pictures from products p join transactions t on p.id = t.products_id group by p.id, p.name, p.price, p.pictures order by count(*) desc")
             .then((result) => {
                 const response = {
                     total: result.rowCount,

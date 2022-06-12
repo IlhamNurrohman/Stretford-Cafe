@@ -26,6 +26,7 @@ const getAllTransactionsfromServer = (id) => {
         // }
         db.query(sqlQuery, [id])
             .then((result) => {
+                console.log(result)
                 const response = {
                     total: result.rowCount,
                     data: result.rows,
