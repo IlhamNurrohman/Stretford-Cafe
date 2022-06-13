@@ -4,10 +4,10 @@ const db = require("../config/db");
 
 const createNewTransactions = (body) => {
     return new Promise((resolve, reject) => {
-        const { date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id } = body;
+        const { date, sub_total, payment_methods_id, products_id, qty, users_id, delivery_methods_id, promos_id,created_at, updated_at } = body;
         const sqlQuery =
-            "INSERT INTO transactions (date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *";
-        db.query(sqlQuery, [date, sub_total, payment_methods_id, created_at, updated_at, products_id, qty, users_id, delivery_methods_id, promos_id])
+            "INSERT INTO transactions (date, sub_total, payment_methods_id, products_id, qty, users_id, delivery_methods_id, promos_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning *";
+        db.query(sqlQuery, [date, sub_total, payment_methods_id, products_id, qty, users_id, delivery_methods_id, promos_id, created_at, updated_at])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
@@ -20,10 +20,7 @@ const createNewTransactions = (body) => {
 
 const getAllTransactionsfromServer = (id) => {
     return new Promise((resolve, reject) => {
-        const sqlQuery = "select transactions.sub_total, products.name, products.pictures, delivery_methods.name as delivery from transactions join delivery_methods on transactions.delivery_methods_id = delivery_methods.id join products on transactions.products_id = products.id join users  on transactions.users_id = users.id  where transactions.users_id = $1";
-        // if (parseInt(roles)){
-        //     sqlQuery;
-        // }
+        const sqlQuery = "select transactions.sub_total, products.name, products.pictures, transactions.delivery_methods_id from transactions join products on transactions.products_id = products.id join users  on transactions.users_id = users.id  where transactions.users_id = $1";
         db.query(sqlQuery, [id])
             .then((result) => {
                 console.log(result)
