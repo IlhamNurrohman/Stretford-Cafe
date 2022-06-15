@@ -1,4 +1,4 @@
-const PaymentMethodsModel = require("../models/Payment_methods");
+const PaymentMethodsModel = require("../models/payment_methods");
 const { createNewPaymentMethods, getAllPaymentMethodsfromServer, updatePaymentMethods, deleteDataPaymentMethodsfromServer } =
 PaymentMethodsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
