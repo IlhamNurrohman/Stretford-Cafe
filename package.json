@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo Hello word && exit 1",
     "startDev": "nodemon index",
-    "start": "node"
+    "start": "node index"
   },
   "keywords": [
     "api"
