@@ -9,7 +9,7 @@ const logger = require("morgan");
 
 // create express application
 const server = express();
-const PORT = 8000;
+const PORT = proses.env.PORT || 8000;
 
 // jika db berhasil connect maka kita jalankan servernya
 db.connect()
