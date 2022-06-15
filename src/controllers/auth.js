@@ -56,7 +56,7 @@ auth.signIn = async (req, res) => {
     successResponse(res, 200, { email, token, auth: data.roles_id }, null);
   } catch (error) {
     //console.log(error, payload);
-    const { status, err } = error;
+    const { status = 500 ,err } = error;
     errorResponse(res, status, err);
   }
 };
