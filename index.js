@@ -16,12 +16,12 @@ db.connect()
         console.log("DB Connected");
         // pasang middleware global
         // logger
-        if (process.env.NODE_END !== "production"){
-            const logger = require("morgan");
-            server.use(
-                logger(":method :url :status :res[content-length] - :response-time ms")
-            );
-        }
+        // if (process.env.NODE_END !== "production"){
+        //     const logger = require("morgan");
+        //     server.use(
+        //         logger(":method :url :status :res[content-length] - :response-time ms")
+        //     );
+        // }
         // handler/middleware untuk body berbentuk form urlencoded
         server.use(express.urlencoded({ extended: false }));
         // handler/middleware untuk body berbentuk raw json
