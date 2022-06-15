@@ -30,7 +30,7 @@ db.connect()
         // pasang cors
         const corsOptions = {
             //origin: '*',
-            origin: ["http://127.0.0.1:5500","http://localhost:3001"],
+            origin: ["http://127.0.0.1:5500","http://localhost:3001","http://localhost:3000"],
             methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
             allowedHeaders: ["Content-Type", "Authorization"],
         };
