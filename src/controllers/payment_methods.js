@@ -2,7 +2,7 @@ const PaymentMethodsModel = require("../models/Payment_methods");
 const { createNewPaymentMethods, getAllPaymentMethodsfromServer, updatePaymentMethods, deleteDataPaymentMethodsfromServer } =
 PaymentMethodsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
-const { status } = require("express/lib/response");
+//const { status } = require("express/lib/response");
 
 const postNewPaymentMethods = (req, res) => {
     createNewPaymentMethods(req.body)
