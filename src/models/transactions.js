@@ -20,7 +20,7 @@ const createNewTransactions = (body) => {
 
 const getAllTransactionsfromServer = (id) => {
     return new Promise((resolve, reject) => {
-        const sqlQuery = "select transactions.sub_total, products.name, products.pictures, transactions.delivery_methods_id from transactions join products on transactions.products_id = products.id join users  on transactions.users_id = users.id  where transactions.users_id = $1";
+        const sqlQuery = "select transactions.sub_total, products.name, products.pictures, transactions.delivery_methods_id, transactions.created_at from transactions join products on transactions.products_id = products.id join users  on transactions.users_id = users.id  where transactions.users_id = $1 order by created_at asc";
         db.query(sqlQuery, [id])
             .then((result) => {
                 console.log(result)

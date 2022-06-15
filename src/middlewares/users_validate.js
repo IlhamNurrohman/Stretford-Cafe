@@ -29,7 +29,7 @@ const validateCreateUsers = [
 
 const checkAuthorizations = (req, res, next) => {
   const roles = req.userPayload.auth;
-  if ( parseInt(roles) !== 2) {
+  if ( roles !== "users") {
     return errorResponse(res, 401, { msg: "Your account is not users" });
   }
   next();

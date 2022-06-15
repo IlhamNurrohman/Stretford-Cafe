@@ -53,7 +53,7 @@ auth.signIn = async (req, res) => {
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
     // return
-    successResponse(res, 200, { email, token }, null);
+    successResponse(res, 200, { email, token, auth: data.roles_id }, null);
   } catch (error) {
     //console.log(error, payload);
     const { status, err } = error;
