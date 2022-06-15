@@ -25,7 +25,7 @@ db.connect()
         // handler/middleware untuk body berbentuk form urlencoded
         server.use(express.urlencoded({ extended: false }));
         // handler/middleware untuk body berbentuk raw json
-        server.use(express.json());
+        //server.use(express.json());
 
         // pasang cors
         const corsOptions = {
