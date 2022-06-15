@@ -8,7 +8,7 @@ const db = require("./src/config/db");
 
 // create express application
 const server = express();
-const PORT = proses.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 // jika db berhasil connect maka kita jalankan servernya
 db.connect()
