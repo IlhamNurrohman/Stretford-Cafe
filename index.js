@@ -9,7 +9,6 @@ const db = require("./src/config/db");
 const logger = require("morgan");
 const cloudConfig = require("./src/config/cloudinary");
 
-
 // create express application
 const server = express();
 const PORT = process.env.PORT || 8000;
@@ -39,7 +38,7 @@ db.connect()
         server.use(cors(corsOptions));
         // server.options("*", cors(corsOptions));
 
-        server.use(cloudConfig)
+        server.use(cloudConfig);
 
         server.use(express.static("public"));
         // pasang router ke server

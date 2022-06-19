@@ -13,7 +13,8 @@ const postNewProduts = (req, res) => {
             });
         })
         .catch(({ status, err }) => {
-            res.status(status).json({
+            console.log(err)
+            res.status(500).json({
                 err,
                 data: [],
             });
