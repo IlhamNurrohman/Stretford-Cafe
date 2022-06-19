@@ -19,7 +19,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-     folder: 'el-coffee',
+     folder: 'stretford-cafe',
   },
 });
 
