@@ -48,7 +48,8 @@ const patchUpdateProducts = (req, res) => {
             })
         })
         .catch(({ status, err }) => {
-            res.status(status).json({
+            //console.log(status,err)
+            res.status(status = 500).json({
                 err,
                 data: [],
             });
