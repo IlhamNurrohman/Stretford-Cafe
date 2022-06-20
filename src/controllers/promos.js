@@ -1,5 +1,5 @@
 const promosModel = require("../models/promos");
-const { createNewPromos, findPromosfromServer, updatePromos, deleteDataPromosfromServer, sortPromos } =
+const { createNewPromos, findPromosfromServer, updatePromos, deleteDataPromosfromServer, sortPromos, getPromosfromServer } =
     promosModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 
@@ -118,11 +118,29 @@ const sortPromosByQuery = (req, res) => {
             });
         });
 };
+const getPromosById = (req, res) => {
+    const { id } = req.params;
+    getPromosfromServer(id)
+        .then((result) => {
+            const { data } = result;
+            res.status(200).json({
+                data,
+                err: null
+            });
+        }).catch(error => {
+            const { err, status } = error;
+            res.status(status).json({
+                err,
+                data: []
+            });
+        });
+};
 
 module.exports = {
     postNewPromos,
     findPromos,
     patchUpdatePromos,
     deletePromosbyId,
-    sortPromosByQuery
+    sortPromosByQuery,
+    getPromosById
 };

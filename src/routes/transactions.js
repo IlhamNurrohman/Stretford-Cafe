@@ -9,6 +9,7 @@ const { checkAuthorizations } = require("../middlewares/users_validate");
 
 Router.post("/", checkToken, checkAuthorizations, transactionsController.postNewTransactions);
 Router.get("/", checkToken, transactionsController.getAllTransactions);
+Router.get("/dashboard", transactionsController.getProfitWeek);
 Router.patch("/:id", checkToken, validate.checkAuthorizations, transactionsController.patchUpdateTransactions);
 Router.delete("/:id", checkToken, validate.checkAuthorizations, transactionsController.deleteTransactionsbyId);
 

@@ -61,17 +61,17 @@ validate.promosData = (req, res, next) => {
       err: "Undifined body Categories !",
     });
   }
-  if (!created_at) {
-    return res.status(400).json({
-      err: "Undifined body Created At !",
-    });
-  }
+  // if (!created_at) {
+  //   return res.status(400).json({
+  //     err: "Undifined body Created At !",
+  //   });
+  // }
   next();
 };
 
 validate.checkAuthorizations = (req, res, next) => {
   const roles = req.userPayload.auth;
-  if ( parseInt(roles) !== "admin") {
+  if ( roles !== "admin") {
     return errorResponse(res, 401, { msg: "Your account is not admin" });
   }
   next();

@@ -1,5 +1,5 @@
 const transactionsModel = require("../models/transactions");
-const { createNewTransactions, getAllTransactionsfromServer, updateTransactions, deleteDataTransactionsfromServer } =
+const { createNewTransactions, getAllTransactionsfromServer, updateTransactions, deleteDataTransactionsfromServer, getProfitDashboard } =
 transactionsModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
@@ -23,6 +23,17 @@ const postNewTransactions = (req, res) => {
 const getAllTransactions = (req, res) => {
     const id = req.userPayload.id;
     getAllTransactionsfromServer(id)
+        .then((result) => {
+            const { total, data } = result;
+            successResponse(res, 200, data, total);
+        })
+        .catch((error) => {
+            const { err, status } = error;
+            errorResponse(res, status, err);
+        });
+}
+const getProfitWeek = (_, res) => {
+    getProfitDashboard()
         .then((result) => {
             const { total, data } = result;
             successResponse(res, 200, data, total);
@@ -74,4 +85,5 @@ module.exports = {
     getAllTransactions,
     patchUpdateTransactions,
     deleteTransactionsbyId,
+    getProfitWeek
 };

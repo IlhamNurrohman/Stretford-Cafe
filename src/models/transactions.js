@@ -1,3 +1,4 @@
+const { reject } = require("bcrypt/promises");
 const { response } = require("express");
 const req = require("express/lib/request");
 const db = require("../config/db");
@@ -72,10 +73,25 @@ const deleteDataTransactionsfromServer = (params) => {
             })
     })
 }
-
+const getProfitDashboard = () => {
+    return new Promise((resolve, reject) => {
+        let sqlQuery = "select date, sum(sub_total) as revenue from transactions where date > now() - interval '1 week' group by date order by date desc ";
+        db.query(sqlQuery)
+            .then((result) => {
+                resolve({
+                    data: result.rows,
+                    msg: null,
+                })
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            })
+    })
+}
 module.exports = {
     createNewTransactions,
     getAllTransactionsfromServer,
     updateTransactions,
     deleteDataTransactionsfromServer,
+    getProfitDashboard
 };

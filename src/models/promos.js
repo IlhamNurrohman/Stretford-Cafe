@@ -22,7 +22,7 @@ const findPromosfromServer = (query) => {
     return new Promise((resolve, reject) => {
         const { find } = query;
         let sqlQuery =
-            "select promos.name_product, promos.discount, promos.normal_price, promos.coupon_code from promos join categories on promos.categories_id = categories.id";
+            "select promos.name_product, promos.discount, promos.normal_price, promos.coupon_code, promos.description, promos.pictures, promos.start_date, promos.end_date from promos join categories on promos.categories_id = categories.id";
         if (find) {
             sqlQuery += " where lower(promos.coupon_code) like lower('%' || $1 || '%') ";
         }
@@ -79,6 +79,24 @@ const deleteDataPromosfromServer = (params) => {
             })
     })
 }
+const getPromosfromServer = (id) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = "select promos.id, promos.name_product, promos.discount, promos.normal_price, promos.coupon_code, promos.description, promos.pictures, promos.start_date, promos.end_date from promos join categories on promos.categories_id = categories.id where promos.id = $1";
+        db.query(sqlQuery, [id])
+            .then((result) => {
+                if (result.rows.length === 0) {
+                    return reject({ status: 404, err: "Promo Not Found" });
+                }
+                const response = {
+                    data: result.rows
+                };
+                resolve(response);
+            })
+            .catch((err) => {
+                reject({ status: 500, err });
+            });
+    });
+}
 
 const sortPromos = (query) => {
     return new Promise((resolve, reject) => {
@@ -88,7 +106,7 @@ const sortPromos = (query) => {
         let arr = [];
         let totalQuery = "select count(promos.id) as total_promos from promos join categories on promos.categories_id = categories.id";
         let sqlQuery =
-            "select promos.name_product, promos.discount, promos.normal_price, promos.coupon_code from promos join categories on promos.categories_id = categories.id";
+            "select promos.id, promos.name_product, promos.discount, promos.normal_price, promos.coupon_code, promos.description, promos.pictures, promos.start_date from promos join categories on promos.categories_id = categories.id";
         if (!find && !categories) {
             sqlQuery += " order by " + sort + " " + order + " LIMIT $1 OFFSET $2";
             arr.push(Number(limit), offset)
@@ -143,4 +161,5 @@ module.exports = {
     updatePromos,
     deleteDataPromosfromServer,
     sortPromos,
+    getPromosfromServer
 };
