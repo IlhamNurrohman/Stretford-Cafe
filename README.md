@@ -16,7 +16,7 @@
 
 <br/>
 
-<br/>
+## Description
 
 Stretford Cafe is a web application that can make it easier for customer to order food and beverages from coffee shop. Customer can simply register, login, see products, order, see order history, edit their profile, etc.
 
@@ -100,7 +100,23 @@ Install dependency packages by run the following code inside project folder:
 $ npm install
 ```
 
-### 3. Run `npm start`
+### 3. Set up .env
+
+| KEYWORD          | VALUE                       |
+| ---------------- | --------------------------- |
+| CLOUD_NAME       | "YOUR API NAME"             |
+| CLOUD_API        | "YOUR API KEY"              |
+| CLOUD_SECRET     | "YOUR CLOUD SECRET"         |
+| DATABASE_URL     | "YOUR DATABASE URL"         |
+| JWT_SECRET       | "YOUR JWT SECRET"           |
+| JWT_ISSUER       | "YOUR JWT ISSUER"           |
+
+
+### 4. Run 
+
+```
+$ npm run startDev
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:8000](http://localhost:8000) to view it in your browser.
