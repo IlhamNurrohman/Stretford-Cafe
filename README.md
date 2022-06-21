@@ -50,4 +50,4 @@ You may also see any lint errors in the console.
 
 ## Related Projects
 
-[Stretford Cafe - Frontend](https://stretford-cafe-react.netlify.app)
+[Stretford Cafe - Frontend](https://github.com/IlhamNurrohman/stretford-cafe-client.git)
