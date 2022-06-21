@@ -77,7 +77,7 @@ const getProfitDashboard = () => {
     return new Promise((resolve, reject) => {
         let sqlQuery = "select date, sum(sub_total) as revenue from transactions where date > now() - interval '1 week' group by date order by date desc ";
         db.query(sqlQuery)
-            .then((res) => {
+            .then((result) => {
                 resolve({
                     data: result.rows,
                     msg: null,
