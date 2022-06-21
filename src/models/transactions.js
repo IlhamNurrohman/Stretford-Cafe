@@ -84,6 +84,7 @@ const getProfitDashboard = () => {
                 })
             })
             .catch((err) => {
+                console.log(err)
                 reject({ status: 500, err });
             })
     })
