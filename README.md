@@ -3,7 +3,7 @@
 <br/>
 
 <div style="display:flex; justify-content:center">
-    <img src="public/images/coffee 1.png" alt="stretford-cafe" />
+    <img src="flowchart/coffee 1.png" alt="stretford-cafe" />
 </div>
 
 ## Build With
