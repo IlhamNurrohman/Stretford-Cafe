@@ -2,6 +2,56 @@ const jwt = require("jsonwebtoken");
 const { errorResponse } = require("../helpers/response");
 const { getUserByEmail } = require("../models/auth");
 
+const registerInput = (req, res, next) => {
+  // cek apakah Undifined body sesuai dengan yang diinginkan
+  const { email, password } = req.body;
+  let emailFormat = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
+  if (!email) {
+    return errorResponse(res, 400, { msg: "Email cannot be empty!" });
+  }
+  for (const key in req.body) {
+    if (key === "email") {
+      if (!req.body[key].match(emailFormat)) {
+        return errorResponse(res, 400, {
+          msg: "Please insert a valid email!",
+        });
+      }
+    }
+  }
+
+  if (!password) {
+    return errorResponse(res, 400, { msg: "Password cannot be empty!" });
+  }
+
+  next();
+};
+
+const loginInput = (req, res, next) => {
+  // cek apakah Undifined body sesuai dengan yang diinginkan
+  const { email, password } = req.body;
+  let emailFormat = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
+  if (!email) {
+    return errorResponse(res, 400, {
+      msg: "Email cannot be empty!",
+    });
+  }
+  
+  for (const key in req.body) {
+    if (key === "email") {
+      if (!req.body[key].match(emailFormat)) {
+        return errorResponse(res, 400, {
+          msg: "Please insert a valid email!",
+        });
+      }
+    }
+  }
+  if (!password) {
+    return errorResponse(res, 400, { msg: "Password cannot be empty!" });
+  }
+
+  next();
+};
+
 const checkDuplicate = (req, res, next) => {
   getUserByEmail(req.body.email)
     .then((result) => {
@@ -57,4 +107,4 @@ const checkToken = (req, res, next) => {
 //     });
 // };
 
-module.exports = { checkDuplicate, checkToken };
+module.exports = { checkDuplicate, checkToken, registerInput, loginInput };

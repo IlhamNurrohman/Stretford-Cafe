@@ -5,6 +5,7 @@ const cors = require("cors");
 const mainRouter = require("./src/routes");
 const db = require("./src/config/db");
 // const mainRouter = require("./src/routes");
+const { redisConn } = require("./src/config/redis");
 
 const logger = require("morgan");
 const cloudConfig = require("./src/config/cloudinary");
@@ -14,6 +15,7 @@ const server = express();
 const PORT = process.env.PORT || 8000;
 
 // jika db berhasil connect maka kita jalankan servernya
+redisConn();
 db.connect()
     .then(() => {
         console.log("DB Connected");
@@ -31,13 +33,14 @@ db.connect()
         // pasang cors
         const corsOptions = {
             //origin: '*',
-            origin: ["*","https://stretford-cafe-react.netlify.app","http://localhost:3000"],
+            origin: ["*","https://stretford-cafe-react.netlify.app","http://localhost:3000", "http://192.168.93.238"],
             methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
             allowedHeaders: ["Content-Type", "Authorization"],
         };
         server.use(cors(corsOptions));
         // server.options("*", cors(corsOptions));
 
+        server.use(express.urlencoded({ extended: true }));
         server.use(cloudConfig);
 
         server.use(express.static("public"));

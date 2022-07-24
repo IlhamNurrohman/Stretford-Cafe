@@ -8,7 +8,7 @@ const { successResponse, errorResponse } = require("../helpers/response");
 
 const usersController = require("../controllers/users");
 const validate = require("../middlewares/validate");
-const userValidate = require("../middlewares/users_validate");
+const { editpassInput } = require("../middlewares/users_validate");
 const adminValidate = require("../middlewares/products_validate");
 
 Router.get("/all", checkToken, adminValidate.checkAuthorizations, usersController.getAllUsers);
@@ -16,6 +16,7 @@ Router.get("/profile-detail", checkToken, usersController.getUsersLoginOnli);
 Router.delete("/:id", checkToken , adminValidate.checkAuthorizations, usersController.deleteUsersbyId);
 Router.post("/", usersController.postNewUsers);
 Router.patch("/", checkToken , upImageFile, usersController.patchUpdateUsers);
+Router.patch("/edit-password", editpassInput, usersController.patchUserPassword);
 
 // Router.patch("/", checkToken, imageUpload.single("pictures"), (req, res) => {
 //     const id = req.userPayload.id;

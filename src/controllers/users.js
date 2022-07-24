@@ -1,10 +1,11 @@
 const usersModel = require("../models/users");
 const imageUpload = require("../middlewares/upload");
-const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer, getUsersLogin } =
+const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer, getUsersLogin, updateUserPassword } =
   usersModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
 const bcrypt = require("bcrypt");
+const { client } = require("../config/redis.js");
 
 const getAllUsers = (req, res) => {
   getAllUsersfromServer(req.query)
@@ -128,10 +129,34 @@ const patchUpdateUsers = (req, res) => {
     });
 };
 
+const patchUserPassword = async (req, res) => {
+  try {
+    const { email, newPassword, confirmCode } = req.body;
+    const confirm = await client.get(`forgotpass${email}`);
+    if (confirm !== confirmCode) {
+      res.status(403).json({ error: "Invalid Confirmation Code !" });
+      return;
+    }
+    const { message } = await updateUserPassword(newPassword, email);
+    if (message) {
+      await client.del(`forgotpass${email}`);
+    }
+    res.status(200).json({
+      message,
+    });
+  } catch (error) {
+    const { message, status } = error;
+    res.status(status ? status : 500).json({
+      error: message,
+    });
+  }
+};
+
 module.exports = {
   postNewUsers,
   getAllUsers,
   patchUpdateUsers,
   deleteUsersbyId,
   getUsersLoginOnli,
+  patchUserPassword,
 };

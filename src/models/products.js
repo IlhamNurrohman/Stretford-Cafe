@@ -160,7 +160,7 @@ const sortProductsTransactions = () => {
 
 const getSingleProductsFromServer = (id) => {
     return new Promise((resolve, reject) => {
-        const sqlQuery = "select products.name, sizes.name_size, products.description, delivery_methods.name as delivery , products.start_hours, products.end_hours, products.stock, products.price, products.pictures, categories.name as category from products join sizes on products.sizes_id = sizes.id join delivery_methods on products.delivery_methods_id = delivery_methods.id join categories on products.categories_id = categories.id where products.id = $1";
+        const sqlQuery = "select products.id, products.name, sizes.name_size, products.description, delivery_methods.name as delivery , products.start_hours, products.end_hours, products.stock, products.price, products.pictures, categories.name as category from products join sizes on products.sizes_id = sizes.id join delivery_methods on products.delivery_methods_id = delivery_methods.id join categories on products.categories_id = categories.id where products.id = $1";
         db.query(sqlQuery, [id])
             .then((result) => {
                 if (result.rows.length === 0) {

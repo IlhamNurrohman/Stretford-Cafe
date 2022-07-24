@@ -3,6 +3,8 @@ const db = require("../config/db");
 const imageUpload = require("../middlewares/upload");
 const multer = require("multer");
 const path = require("path");
+const { ErrorHandler } = require("../helpers/errorHandler");
+const bcrypt = require("bcrypt");
 
 const getAllUsersfromServer = (query) => {
   return new Promise((resolve, reject) => {
@@ -126,10 +128,25 @@ const getUsersLogin = (id) => {
   })
 }
 
+const updateUserPassword = async (newPassword, email) => {
+  try {
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    const resetPass = await db.query("UPDATE users set password = $1 WHERE email = $2 RETURNING *", [hashedNewPassword, email]);
+    if (!resetPass.rowCount) throw new ErrorHandler({ status: 404, message: "Email Not Found" });
+    return {
+      message: "Your Password successfully recovered",
+    };
+  } catch (error) {
+    const { status, message } = error;
+    throw new ErrorHandler({ status: status ? status : 500, message });
+  }
+};
+
 module.exports = {
   createNewUsers,
   getAllUsersfromServer,
   updateUsers,
   deleteDataUsersfromServer,
   getUsersLogin,
+  updateUserPassword
 };
