@@ -142,11 +142,34 @@ const updateUserPassword = async (newPassword, email) => {
   }
 };
 
+const updateUserPasswordProfile = async (id, body) => {
+  try {
+    // const id = req.userPayload.id;
+    const { password } = body;
+    const updated_at = new Date(Date.now());
+    let hashedNewPassword = null ;
+    if (password) {
+      hashedNewPassword = await bcrypt.hash(password, 10);
+    }
+    const resetPass = await db.query("UPDATE users SET password= COALESCE($1, password), updated_at = $2 WHERE id=$3 RETURNING *", [ hashedNewPassword, updated_at, id]);
+    if (!resetPass.rowCount) throw new ErrorHandler({ status: 404, message: "Id Not Found" });
+    console.log(hashedNewPassword)
+    console.log(password)
+    return {
+      message: "Update successful",
+    };
+  } catch (error) {
+    const { status, message } = error;
+    throw new ErrorHandler({ status: status ? status : 500, message });
+  }
+};
+
 module.exports = {
   createNewUsers,
   getAllUsersfromServer,
   updateUsers,
   deleteDataUsersfromServer,
   getUsersLogin,
-  updateUserPassword
+  updateUserPassword,
+  updateUserPasswordProfile
 };

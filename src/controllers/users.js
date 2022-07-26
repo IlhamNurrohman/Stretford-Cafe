@@ -1,6 +1,6 @@
 const usersModel = require("../models/users");
 const imageUpload = require("../middlewares/upload");
-const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer, getUsersLogin, updateUserPassword } =
+const { createNewUsers, getAllUsersfromServer, updateUsers, deleteDataUsersfromServer, getUsersLogin, updateUserPassword, updateUserPasswordProfile } =
   usersModel;
 const { successResponse, errorResponse } = require("../helpers/response");
 const { status } = require("express/lib/response");
@@ -152,6 +152,20 @@ const patchUserPassword = async (req, res) => {
   }
 };
 
+const patchUserPasswordProfile = async (req, res) => {
+  try {
+    const { message } = await updateUserPasswordProfile(req.userPayload.id, req.body);
+    res.status(200).json({
+      message,
+    });
+  } catch (error) {
+    const { message, status } = error;
+    res.status(status ? status : 500).json({
+      error: message,
+    });
+  }
+};
+
 module.exports = {
   postNewUsers,
   getAllUsers,
@@ -159,4 +173,5 @@ module.exports = {
   deleteUsersbyId,
   getUsersLoginOnli,
   patchUserPassword,
+  patchUserPasswordProfile
 };

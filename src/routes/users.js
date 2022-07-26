@@ -15,8 +15,9 @@ Router.get("/all", checkToken, adminValidate.checkAuthorizations, usersControlle
 Router.get("/profile-detail", checkToken, usersController.getUsersLoginOnli);
 Router.delete("/:id", checkToken , adminValidate.checkAuthorizations, usersController.deleteUsersbyId);
 Router.post("/", usersController.postNewUsers);
-Router.patch("/", checkToken , upImageFile, usersController.patchUpdateUsers);
+Router.patch("/", checkToken, upImageFile, usersController.patchUpdateUsers);
 Router.patch("/edit-password", editpassInput, usersController.patchUserPassword);
+Router.patch("/update-password", checkToken, usersController.patchUserPasswordProfile);
 
 // Router.patch("/", checkToken, imageUpload.single("pictures"), (req, res) => {
 //     const id = req.userPayload.id;
