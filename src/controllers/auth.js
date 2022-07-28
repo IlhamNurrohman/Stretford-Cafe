@@ -49,7 +49,7 @@ auth.signIn = async (req, res) => {
     const payload = {
       id: data.id,
       email,
-      auth: data.roles_id,
+      roles: data.roles_id,
     };
     const jwtOptions = {
       issuer: process.env.JWT_ISSUER,
@@ -57,7 +57,7 @@ auth.signIn = async (req, res) => {
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
     // return
-    successResponse(res, 200, { id: data.id, email, token, auth: data.roles_id }, null);
+    successResponse(res, 200, { id: data.id, email, token, roles: data.roles_id }, null);
   } catch (error) {
     //console.log(error);
     const { status = 500 ,err } = error;

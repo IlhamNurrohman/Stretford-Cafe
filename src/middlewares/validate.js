@@ -121,7 +121,7 @@ validate.sizesData = (req, res, next) => {
 };
 
 validate.checkAuthorizations = (req, res, next) => {
-  const roles = req.userPayload.auth;
+  const roles = req.userPayload.roles;
   if ( parseInt(roles) !== 1) {
     return errorResponse(res, 401, { msg: "Your account is not admin" });
   }
