@@ -53,7 +53,7 @@ auth.signIn = async (req, res) => {
     };
     const jwtOptions = {
       issuer: process.env.JWT_ISSUER,
-      expiresIn: "1000000s", // expired in 10000s
+      expiresIn: "12h", // expired in 12h
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
     // return
@@ -62,6 +62,18 @@ auth.signIn = async (req, res) => {
     //console.log(error);
     const { status = 500 ,err } = error;
     errorResponse(res, status, err);
+  }
+};
+
+auth.logout = async (req, res) => {
+  try {
+    const cachedLogin = await client.get(`jwt${req.userPayload.id}`);
+    if (cachedLogin) {
+      await client.del(`jwt${req.userPayload.id}`);
+    }
+    successResponse(res, 200, { message: "You have successfully logged out" }, null);
+  } catch (err) {
+    errorResponse(res, 500, err.message);
   }
 };
 
