@@ -3,62 +3,62 @@ const { errorResponse } = require("../helpers/response");
 const jwt = require("jsonwebtoken");
 
 validate.productsData = (req, res, next) => {
-  // cek apakah Undifined body sesuai dengan yang diinginkan
+  // cek apakah  body sesuai dengan yang diinginkan
   const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at } = req.body;
   const pictures = req.file;
   if (!name) {
     return res.status(400).json({
-      err: "Undifined Undifined body Name !",
+      err: " Empty body Name !",
     });
   }
   if (!sizes_id) {
     return res.status(400).json({
-      err: "Undifined Undifined body Sizes !",
+      err: " Empty body Sizes !",
     });
   }
   if (!description) {
     return res.status(400).json({
-      err: "Undifined body Descrption !",
+      err: " Empty body Descrption !",
     });
   }
   if (!delivery_methods_id) {
     return res.status(400).json({
-      err: "Undifined body Delivery Method !",
+      err: " Empty body Delivery Method !",
     });
   }
   if (!start_hours) {
     return res.status(400).json({
-      err: "Undifined body Start Hours !",
+      err: " Empty body Start Hours !",
     });
   }
   if (!end_hours) {
     return res.status(400).json({
-      err: "Undifined body End Hours !",
+      err: " Empty body End Hours !",
     });
   }
   if (!stock) {
     return res.status(400).json({
-      err: "Undifined body Stock !",
+      err: " Empty body Stock !",
     });
   }
   if (!pictures) {
     return res.status(400).json({
-      err: "Undifined body Pictures !",
+      err: " Empty body Pictures !",
     });
   }
   if (!categories_id) {
     return res.status(400).json({
-      err: "Undifined body Categories !",
+      err: " Empty body Categories !",
     });
   }
   if (!price) {
     return res.status(400).json({
-      err: "Undifined body Price !",
+      err: " Empty body Price !",
     });
   }
   if (!created_at) {
     return res.status(400).json({
-      err: "Undifined body Created At !",
+      err: " Empty body Created At !",
     });
   }
   next();
