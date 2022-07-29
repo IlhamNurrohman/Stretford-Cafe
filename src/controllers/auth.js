@@ -43,25 +43,25 @@ auth.signIn = async (req, res) => {
     // cek kecocokan email dan pass di db
     const data = await getPassByUserEmail(email);
     const result = await bcrypt.compare(password, data.password);
-    if (!result)
-      return errorResponse(res, 400, { msg: "Email or Password wrong !" });
+    if (!result) return errorResponse(res, 400, { msg: "Email or Password wrong !" });
     // generate jwt
     const payload = {
       id: data.id,
       email,
-      roles: data.roles_id,
+      roles_id: data.roles_id,
     };
+
     const jwtOptions = {
       issuer: process.env.JWT_ISSUER,
-      expiresIn: "12h", // expired in 12h
+      expiresIn: "12h", // expired in 10000s
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOptions);
+    await client.set(`jwt${data.id}`, token);
     // return
-    successResponse(res, 200, { id: data.id, email, token, roles: data.roles_id }, null);
+    successResponse(res, 200, { id: data.id, email, token, roles_id: data.roles_id }, null);
   } catch (error) {
-    //console.log(error);
-    const { status = 500 ,err } = error;
-    errorResponse(res, status, err);
+    const { status = status ? status : 500, message } = error;
+    errorResponse(res, status, { msg: message });
   }
 };
 
