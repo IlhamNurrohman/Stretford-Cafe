@@ -71,7 +71,7 @@ validate.promosData = (req, res, next) => {
 
 validate.checkAuthorizations = (req, res, next) => {
   const roles = req.userPayload.auth;
-  if ( roles !== "admin") {
+  if ( roles === "admin") {
     return errorResponse(res, 401, { msg: "Your account is not admin" });
   }
   next();
