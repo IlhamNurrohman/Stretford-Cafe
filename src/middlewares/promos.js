@@ -8,57 +8,57 @@ validate.promosData = (req, res, next) => {
 
   if (!name_product) {
     return res.status(400).json({
-      err: "Undifined Undifined body Name Products !",
+      err: "Undifined Name Products !",
     });
   }
   if (!normal_price) {
     return res.status(400).json({
-      err: "Undifined Undifined body Normal Price !",
+      err: "Undifined Normal Price !",
     });
   }
   if (!sizes_id) {
     return res.status(400).json({
-      err: "Undifined body Sizes !",
+      err: "Undifined Sizes !",
     });
   }
   if (!description) {
     return res.status(400).json({
-      err: "Undifined body Descrption !",
+      err: "Undifined Descrption !",
     });
   }
   if (!delivery_methods_id) {
     return res.status(400).json({
-      err: "Undifined body Delivery Method !",
+      err: "Undifined Delivery Method !",
     });
   }
   if (!discount) {
     return res.status(400).json({
-      err: "Undifined body Discount !",
+      err: "Undifined Discount !",
     });
   }
   if (!start_date) {
     return res.status(400).json({
-      err: "Undifined body Start Date !",
+      err: "Undifined Start Date !",
     });
   }
   if (!end_date) {
     return res.status(400).json({
-      err: "Undifined body End Date !",
+      err: "Undifined End Date !",
     });
   }
   if (!coupon_code) {
     return res.status(400).json({
-      err: "Undifined body Coupon Code !",
+      err: "Undifined Coupon Code !",
     });
   }
   if (!pictures) {
     return res.status(400).json({
-      err: "Undifined body Pictures !",
+      err: "Undifined Pictures !",
     });
   }
   if (!categories_id) {
     return res.status(400).json({
-      err: "Undifined body Categories !",
+      err: "Undifined Categories !",
     });
   }
   // if (!created_at) {
