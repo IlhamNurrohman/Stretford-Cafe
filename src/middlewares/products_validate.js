@@ -56,11 +56,11 @@ validate.productsData = (req, res, next) => {
       err: " Empty body Price !",
     });
   }
-  if (!created_at) {
-    return res.status(400).json({
-      err: " Empty body Created At !",
-    });
-  }
+  // if (!created_at) {
+  //   return res.status(400).json({
+  //     err: " Empty body Created At !",
+  //   });
+  // }
   next();
 };
 

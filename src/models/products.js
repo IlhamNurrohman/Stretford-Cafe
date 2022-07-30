@@ -3,12 +3,12 @@ const db = require("../config/db");
 
 const createNewProducts = (req, file) => {
     return new Promise((resolve, reject) => {
-        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, created_at, updated_at } = req.body;
+        const { name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, categories_id, price, updated_at } = req.body;
         //const pictures = file ? file.path.replace("public", "").replace(/\\/g, "/") : null ;
         const pictures = file ? file.path : null;
         const sqlQuery =
-            "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning *";
-        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at])
+            "INSERT INTO products (name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now(), $11) returning *";
+        db.query(sqlQuery, [name, sizes_id, description, delivery_methods_id, start_hours, end_hours, stock, pictures, categories_id, price, updated_at])
             .then(({ rows }) => {
                 const response = {
                     data: rows[0],
