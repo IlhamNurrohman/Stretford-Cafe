@@ -83,7 +83,7 @@ const deleteDataPromosfromServer = (params) => {
 }
 const getPromosfromServer = (id) => {
     return new Promise((resolve, reject) => {
-        const sqlQuery = "select promos.id, promos.name_product, promos.discount, promos.normal_price, promos.coupon_code, promos.description, promos.pictures, promos.start_date, promos.end_date from promos join categories on promos.categories_id = categories.id where promos.id = $1";
+        const sqlQuery = "select promos.id, promos.name_product, promos.discount, promos.normal_price, promos.coupon_code, promos.description, promos.pictures, promos.start_date, promos.end_date, sizes.name_size, delivery_methods.name as delivery from promos join categories on promos.categories_id = categories.id join sizes on promos.sizes_id = sizes.id join delivery_methods on promos.delivery_methods_id = delivery_methods.id where promos.id = $1";
         db.query(sqlQuery, [id])
             .then((result) => {
                 if (result.rows.length === 0) {
