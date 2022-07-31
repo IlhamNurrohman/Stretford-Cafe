@@ -90,21 +90,42 @@ const checkToken = (req, res, next) => {
   );
 };
 
-// const roleAuth = (req, res, next) => {
-//   checkAuthorizations(req.payload.authorizations_id,)
-//     .then((role) => {
-//       if (role !== 1) {
-//         return errorResponse(res, 401, { msg: "Your account is not admin" });
-//       }
-//       if (role !== 2) {
-//         return errorResponse(res, 401, { msg: "Your account is not user" });
-//       };
-//       next();
-//     })
-//     .catch((error) => {
-//       const { status, err } = error;
-//       errorResponse(res, status, err);
-//     });
-// };
+const emailToken = (req, _res, next) => {
+  const { token } = req.params;
+  jwt.verify(
+    token,
+    process.env.JWT_SECRET_CONFIRM_KEY,
+    async (err, payload) => {
+      if (err) {
+        next({
+          status: 403,
+          message: "Your link expired, please register again.",
+        });
+        return;
+      }
+      try {
+        const cachedToken = await client.get(`jwt${payload.email}`);
+        if (!cachedToken) {
+          throw new ErrorHandler({
+            status: 403,
+            message: "Your link expired,please register again",
+          });
+        }
 
-module.exports = { checkDuplicate, checkToken, registerInput, loginInput };
+        if (cachedToken !== token) {
+          throw new ErrorHandler({
+            status: 403,
+            message: "Token Unauthorize, please register again",
+          });
+        }
+      } catch (error) {
+        const status = error.status ? error.status : 500;
+        next({ status, message: error.message });
+      }
+      req.userPayload = payload;
+      next();
+    }
+  );
+};
+
+module.exports = { checkDuplicate, checkToken, registerInput, loginInput, emailToken };
