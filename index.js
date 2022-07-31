@@ -33,7 +33,7 @@ db.connect()
         // pasang cors
         const corsOptions = {
             //origin: '*',
-            origin: ["*","https://stretford-cafe.netlify.app/","http://localhost:3000", "http://192.168.93.238"],
+            origin: ["*","https://stretford-cafe.netlify.app","http://localhost:3000", "http://192.168.93.238"],
             methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
             allowedHeaders: ["Content-Type", "Authorization"],
         };
